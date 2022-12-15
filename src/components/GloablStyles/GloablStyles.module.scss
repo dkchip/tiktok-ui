@@ -2,6 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap');
 :root{
     --primary : #fe2c55;
+    --white :#ffffff;
+    --black: #000000;
+    --text-color:#292828;
 }
 
 *{
@@ -19,4 +22,20 @@ body{
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;
+}
+
+.body{
+    margin: 0 auto;
+    width: 1150px;
+}
+
+button{
+    cursor: pointer;
+}
+
+input,button{
+    outline: none;
+    border: none;
+    background-color: transparent;
+
 }
