@@ -1,0 +1,32 @@
+.account-result{
+    width: 100%;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &:hover{
+        background-color: rgba(22, 24, 35, 0.03);
+        
+    }
+
+}
+
+.account-result img{
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.name{
+    & h4{
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+}
+
+.nick-name{
+    font-size: 1.4rem;
+    color: rgba(22, 24, 35, 0.5);
+}

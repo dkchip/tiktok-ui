@@ -9,6 +9,7 @@ import { faCircleXmark,
 import { useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 
+import AccountItem from '../../../components/AccountItem';
 import { Wrapper } from '../../../components/Popper';
 import images from '../../../asset/img';
 const cx = classnames.bind(style);
@@ -37,7 +38,10 @@ function Header() {
                                     <div className={cx('search-result')} tabIndex = '-1' {...attrs}>
                                         <Wrapper>
                                             <h4 className={cx('search-account')}>Tai Khoan</h4>
-                                            
+                                            <AccountItem></AccountItem>
+                                            <AccountItem></AccountItem>
+                                            <AccountItem></AccountItem>
+                                            <AccountItem></AccountItem>
                                         </Wrapper>
                                       
                                     </div>
@@ -59,7 +63,9 @@ function Header() {
                     </div>
                 </Tippy>
 
-                <div className={cx('section')}></div>
+                <div className={cx('section')}>
+                    
+                </div>
             </div>
         </div>
     );
