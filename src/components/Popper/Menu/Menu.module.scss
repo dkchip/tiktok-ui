@@ -1,0 +1,17 @@
+.menu-list{
+    width: 223px;
+
+}
+
+.menu-item{
+    margin-left: 0;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 8px 10px 16px;
+
+    &:hover{
+        background-color: var(--background-color-hover);
+    }
+}

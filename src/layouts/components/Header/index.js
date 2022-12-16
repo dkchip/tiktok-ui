@@ -3,7 +3,12 @@ import classnames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, 
         // faSpinner, 
-        faMagnifyingGlass
+        faMagnifyingGlass,
+        faPlus,
+        faEllipsisVertical,
+        faEarthAsia,
+        faQuestion,
+        faKeyboard
       } from '@fortawesome/free-solid-svg-icons';
 
 import { useState } from 'react';
@@ -12,7 +17,26 @@ import Tippy from '@tippyjs/react/headless';
 import AccountItem from '../../../components/AccountItem';
 import { Wrapper } from '../../../components/Popper';
 import images from '../../../asset/img';
+import Button from '../../../components/Button';
+import Menu from '../../../components/Popper/Menu';
 const cx = classnames.bind(style);
+
+
+const MENU_ITEM = [
+    {
+        icon : <FontAwesomeIcon icon = {faEarthAsia} />,
+        title : 'Tiếng Việt'
+    },
+    {
+        icon : <FontAwesomeIcon icon = {faQuestion} />,
+        title : 'Phản hòi và trợ giúp',
+        to:'/feedback'
+    },
+    {
+        icon : <FontAwesomeIcon icon = {faKeyboard} />,
+        title : 'Phím tắt trên bàn phím'
+    }
+]
 
 function Header() {
     const[visible,setVisible] = useState(false)
@@ -64,7 +88,14 @@ function Header() {
                 </Tippy>
 
                 <div className={cx('section')}>
-                    
+                    <Button outline  iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button>
+                    <Button primary >Đăng nhập</Button>
+
+                    <Menu items = {MENU_ITEM}>
+                        <button>
+                            <FontAwesomeIcon className={cx('menu-icon')} icon={faEllipsisVertical}></FontAwesomeIcon>
+                        </button>
+                    </Menu>
                 </div>
             </div>
         </div>

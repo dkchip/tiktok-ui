@@ -5,6 +5,8 @@
     --white :#ffffff;
     --black: #000000;
     --text-color:#292828;
+
+    --background-color-hover : rgba(22, 24, 35, .03);
 }
 
 *{
@@ -38,4 +40,9 @@ input,button{
     border: none;
     background-color: transparent;
 
+}
+
+a[href]{
+    text-decoration: none;
+    color: black;
 }

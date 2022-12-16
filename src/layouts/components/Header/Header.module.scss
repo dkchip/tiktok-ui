@@ -84,3 +84,21 @@
     background-color: #ccc;
 }
 
+
+.section{
+    display: flex;
+    align-items: center;
+}
+
+.menu-icon{
+    margin-left: 16px;
+    padding: 0 6px;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.menu-item{
+    width: 222px;
+    min-height: 200px;
+}
+
