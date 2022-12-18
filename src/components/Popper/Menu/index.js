@@ -21,16 +21,20 @@ function Menu({ children, items = [] }) {
                         onClick = {()=>{
                             if(isParent){
                                 setHistory((prev) => [...prev,item.children])
+                            }else{
+
                             }
                         }}
                     />;
         });
     };
+
     return (
         <Tippy
             placement="bottom-end"
             interactive
-            delay={[0, 80000000]}
+            delay={[0, 800]}
+            onHide = {()=>{setHistory(prev => prev.slice(0,1))}}
             render={(attrs) => (
                 <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
                     <Wrapper>
