@@ -9,10 +9,9 @@ function MenuItem({ data,onClick }) {
         separate : data.separate
 
     })
-    console.log(classes)
     return (
         <Button className={classes} 
-                to = {data.to}
+                to = {data.path}
                 iconLeft={data.icon}
                 onClick = {onClick}>
             {data.title}
