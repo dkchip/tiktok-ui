@@ -29,12 +29,23 @@
 }
 
 
-
+.loading,
 .input-icon{
     margin: 0 6px;
     color: rgba(22, 24, 35, 0.34);
 }
 
+.loading{
+    animation: spiner 1s linear infinite;
+}
+
+@keyframes spiner{
+    from{
+        transform: rotate(0);
+    }to{
+        transform: rotate(360deg);
+    }
+}
 
 .search-result{
  width: 361px;

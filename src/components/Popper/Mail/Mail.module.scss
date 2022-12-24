@@ -1,4 +1,58 @@
+
+//----------------------------------------------------------------
 .mail-result{
     width: 376px;
     min-height: 100px;
+
+
+}
+
+.wrapper{
+    width: 100%;
+    padding: 20px 8px 0 8px;
+}
+
+.heading{
+    font-weight: 600;
+}
+
+.menu{
+    display: grid;
+
+}
+
+.menu-item{
+    margin: 2px 8px 2px 0;
+    padding: 2px 8px;
+    font-size: 1.4rem;
+    background: rgba(22, 24, 35, 0.06);
+    border-radius: 12px;
+    transition: 0.3s ease-in;
+    &:hover{
+        background: rgba(0, 0, 0, 0.12);
+    }
+
+
+    
+}
+
+.active{
+    color: rgb(255, 255, 255);
+    background: rgb(22, 24, 35);
+}
+
+// body mail bôx
+.container{
+    width: 100%;
+    margin-top: 10px;
+    padding: 0 8px;
+}
+
+.time-mail{
+    font-size: 1.4rem;
+    color: rgba(22, 24, 35, 0.5);
+}
+
+.mail-item{
+
 }

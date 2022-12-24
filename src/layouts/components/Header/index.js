@@ -1,5 +1,7 @@
-import style from './Header.module.scss';
+import { useState } from 'react';
 import classnames from 'classnames/bind';
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
         faPlus,
@@ -7,17 +9,14 @@ import {
         faEarthAsia,
         faQuestion,
         faKeyboard,
-        faPaperPlane,
-        faEnvelope,
         faSignOut,
         faUser,
         faCoins,
         faGear
       } from '@fortawesome/free-solid-svg-icons';
 
-
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css'
+import { MessageIcon,InboxIcon } from '../../../components/Icon';
+import style from './Header.module.scss';
 import images from '../../../asset/img';
 import Button from '../../../components/Button';
 import Menu from '../../../components/Popper/Menu';
@@ -85,8 +84,13 @@ const curentUser = true;
 
 
 function Header() {
-
-
+    const [visible,setVisible] = useState(false)
+    const show = () =>{
+        setVisible(true)
+    }
+    const hide = () =>{
+        setVisible(false)
+    }
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -102,16 +106,17 @@ function Header() {
                                 <Button outline  iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button> 
                                 <Tippy content='Tin nhắn' placement='bottom' >
                                     <button className={cx('section-btn')}>
-                                        <FontAwesomeIcon icon ={faPaperPlane}></FontAwesomeIcon>
+                                        <MessageIcon />
                                     </button> 
                                 </Tippy>
 
-
-                               <Mail>
-                                    <button className={cx('section-btn')}>
-                                        <FontAwesomeIcon icon ={faEnvelope}></FontAwesomeIcon>
+                                <Mail visible = {visible} onHide = {hide} >
+                                    <button onClick={show} className={cx('section-btn')} >
+                                       <InboxIcon />
                                     </button>
-                               </Mail>
+                                </Mail>
+
+                            
                            </> 
                     ) 
                     : 
@@ -129,7 +134,7 @@ function Header() {
                                 <Image 
                                 alt ='AVT'
                                 className={cx('menu-user-avt')} 
-                                src='https://p16-sign-sg.tiktokcdn.com/aweme/720x720/tos-alisg-avt-0068/e23fde803839cd77bef71e4318e59203.jpeg?x-expires=1671530400&x-signature=Rnui1x8%2BSLZm3oq%2FUmJu8gOVEKY%3D' />
+                                src='https://p9-sign-sg.tiktokcdn.com/aweme/720x720/tos-alisg-avt-0068/e23fde803839cd77bef71e4318e59203.jpeg?x-expires=1671951600&x-signature=SFN%2B1%2BiI%2FxX4orbxeM0jZTnxAsM%3D' />
                             ):(
                                 
                                 <button>
