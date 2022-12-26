@@ -2,13 +2,14 @@ import Tippy from '@tippyjs/react/headless';
 import classnames from 'classnames/bind';
 import style from './Menu.module.scss';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import MenuItem from './MenuItem';
 import Wrapper from '../Wrapper';
 import HeaderMenu from './HeaderMenu';
 const cx = classnames.bind(style);
 
-function Menu({ children, items = [] }) {
+function Menu({ hideOnClick = false,children, items = [] }) {
     const [history, setHistory] = useState([{ data: items }]);
     const curent = history[history.length - 1];
 
@@ -33,16 +34,19 @@ function Menu({ children, items = [] }) {
         <Tippy
             placement="bottom-end"
             interactive
+            hideOnClick ={hideOnClick}
             delay={[0, 800]}
             onHide = {()=>{setHistory(prev => prev.slice(0,1))}}
             render={(attrs) => (
                 <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
                     <Wrapper>
-                        {history.length >1 && <HeaderMenu title="Language" 
+                        {history.length >1 && <HeaderMenu title={curent.title} 
                                                            onBack = {()=>{
                                                             setHistory(prev => prev.slice(0,prev.length-1))
                                                             }}/> }
-                        {renderItem()}
+                        <div className={cx('language-list')}>
+                            {renderItem()}
+                        </div>
                     </Wrapper>
                 </div>
             )}
@@ -50,6 +54,12 @@ function Menu({ children, items = [] }) {
             {children}
         </Tippy>
     );
+}
+
+Menu.propTypes = {
+    hideOnClick : PropTypes.bool,
+    children : PropTypes.node.isRequired,
+    items : PropTypes.array
 }
 
 export default Menu;

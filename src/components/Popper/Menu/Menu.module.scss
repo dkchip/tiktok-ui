@@ -46,3 +46,9 @@
     transform: translateX(-50%);
     font-weight: 600;
 }
+
+.language-list{
+    max-height: 490px;
+    overflow: hidden;
+    overflow-y: auto;
+}

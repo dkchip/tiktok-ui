@@ -5,6 +5,7 @@ import { faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames/bind';
 import { SearchIcon } from '../../../components/Icon';
 
+import request from '../../../utils/request';
 import AccountItem from '../../../components/AccountItem';
 import { Wrapper } from '../../../components/Popper';
 import style from './Search.module.scss';
@@ -18,89 +19,94 @@ function Search() {
     const [loading, setLoading] = useState(false);
     const inputRef = useRef();
 
-    const debounce = useDebounce(searchValue,800);
+    const debounce = useDebounce(searchValue, 800);
+
+
     useEffect(() => {
-        if(!debounce){
+        if (!debounce) {
             return;
         }
-        setLoading(true)
-        fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounce)}&type=less`)
-            .then(res => res.json())
-            .then(res =>{
-                setSearchResult(res.data)
-                   setLoading(false)
+        setLoading(true);
+        request
+            .get(`users/search`, {
+                params: {
+                    q: debounce,
+                    type: `less`,
+                },
             })
-            .catch(()=>{
-                setLoading(false)
+            .then((res) => {
+                setSearchResult(res.data.data);
+                setLoading(false);
             })
+            .catch(() => {
+                setLoading(false);
+            });
     }, [debounce]);
 
-
     return (
-        <HeadlessTippy
-            interactive={true}
-            onClickOutside={() => {
-                setShowReslut(false);
-            }}
-            visible={showReslut && searchResult.length > 0 && searchValue.trim().length > 0}
-            render={(attrs) => (
-                <div className={cx('search-result')} tabIndex="-1" {...attrs}>
-                    <Wrapper>
-                        <h4 className={cx('search-account')}>Tai Khoan</h4>
-                        {searchResult.map((result)=>{
-                            
-                            return (<AccountItem key ={result.id}
-                                        data={result}
-                                    />)
-                        })}
-                    </Wrapper>
-                </div>
-            )}
-        >
-            <div className={cx('search')}>
-                <input
-                    ref={inputRef}
-                    value={searchValue}
-                    onFocus={() => {
-                        setShowReslut(true);
-                    }}
-                    type="text"
-                    placeholder="Tìm kiếm tài khoản và video"
-                    onChange={(e) => {
-
-                        if (e.target.value.length > 0 && e.target.value === ' ') {
-                            return;
-                        }else if(e.target.value.length === 0){
-                            setSearchResult([])
-                        }
-                        setSearchValue(e.target.value);
-                    }}
-                />
-                
-                {searchValue && !loading && (
-                    <button
-                        className={cx('input-icon')}
-                        onClick={() => {
-                            setSearchValue('');
-                            setSearchResult([])
-                            inputRef.current.focus();
-                        }}
-                    >
-                        <FontAwesomeIcon icon={faCircleXmark} />
-                    </button>
+        <div>
+            <HeadlessTippy
+                interactive={true}
+                onClickOutside={() => {
+                    setShowReslut(false);
+                }}
+                visible={showReslut && searchResult.length > 0 && searchValue.trim().length > 0}
+                render={(attrs) => (
+                    <div className={cx('search-result')} tabIndex="-1" {...attrs}>
+                        <Wrapper>
+                            <h4 className={cx('search-account')}>Tai Khoan</h4>
+                            {searchResult.map((result) => {
+                                return <AccountItem key={result.id} data={result} />;
+                            })}
+                        </Wrapper>
+                    </div>
                 )}
+            >
+                <div className={cx('search')}>
+                    <input
+                        ref={inputRef}
+                        value={searchValue}
+                        onFocus={() => {
+                            setShowReslut(true);
+                        }}
+                        type="text"
+                        placeholder="Tìm kiếm tài khoản và video"
+                        onChange={(e) => {
+                            if (!e.target.value.startsWith(' ')) {
+                                setSearchValue(e.target.value);
+                            } else if (e.target.value.length === 0) {
+                                setSearchResult([]);
+                            }
+                        }}
+                    />
 
-                {loading && (<button className={cx('loading')}>
-                    <FontAwesomeIcon icon={faSpinner} />
-                </button>)}
+                    {searchValue && !loading && (
+                        <button
+                            className={cx('input-icon')}
+                            onClick={() => {
+                                setSearchValue('');
+                                setSearchResult([]);
+                                inputRef.current.focus();
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faCircleXmark} />
+                        </button>
+                    )}
 
-                <span className={cx('line')}></span>
+                    {loading && (
+                        <button className={cx('loading')}>
+                            <FontAwesomeIcon icon={faSpinner} />
+                        </button>
+                    )}
 
-                <button className={cx('search-btn')} type="button">
-                    <SearchIcon width="2.2rem" height="2.2rem" />
-                </button>
-            </div>
-        </HeadlessTippy>
+                    <span className={cx('line')}></span>
+
+                    <button className={cx('search-btn')} type="button">
+                        <SearchIcon width="2.2rem" height="2.2rem" />
+                    </button>
+                </div>
+            </HeadlessTippy>
+        </div>
     );
 }
 

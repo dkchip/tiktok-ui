@@ -15,6 +15,7 @@ import {
         faGear
       } from '@fortawesome/free-solid-svg-icons';
 
+import routesConfig from '../../../config/routes';
 import { MessageIcon,InboxIcon } from '../../../components/Icon';
 import style from './Header.module.scss';
 import images from '../../../asset/img';
@@ -23,6 +24,7 @@ import Menu from '../../../components/Popper/Menu';
 import Image from '../../../components/Image';
 import Search from '../Search';
 import Mail from '../../../components/Popper/Mail';
+import { Link } from 'react-router-dom';
 
 const cx = classnames.bind(style);
 const MENU_ITEM = [
@@ -39,7 +41,8 @@ const MENU_ITEM = [
                 {
                     title : 'English',
                     code : 'en'
-                }
+                }        
+
             ]
         }
     },
@@ -95,7 +98,9 @@ function Header() {
         <div className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <div className={cx('logo')}>
-                    <img src={images.logo} alt="logo tiktok"></img>
+                    <Link className={cx('logo-link')} to={routesConfig.home}>
+                        <img src={images.logo} alt="logo tiktok"></img>
+                    </Link>
                 </div>
 
                 <Search />
@@ -103,7 +108,7 @@ function Header() {
                 <div className={cx('section')}>
                     {curentUser ? (
                            <>
-                                <Button outline  iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button> 
+                                <Button outline   iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button> 
                                 <Tippy content='Tin nhắn' placement='bottom' >
                                     <button className={cx('section-btn')}>
                                         <MessageIcon />
