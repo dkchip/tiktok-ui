@@ -1,0 +1,58 @@
+.account-list{
+    width: 100%;
+}
+
+.title{
+    padding: 0 8px;
+    margin-bottom: 10px ;
+    color: var(--text-color);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+
+.user{
+    display: flex;
+    align-items: center;
+    padding: 8px;
+
+    &:hover{
+        background-color: var(--background-color-hover);
+    }
+}
+
+.image{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+
+}
+
+.info{
+
+}
+
+.name-wrap{
+    display: flex;
+    align-items: center;
+}
+
+.nick-name{
+    font-size: 1.6rem;
+}
+
+.icon{
+ margin-left: 4px;
+}
+
+.full-name{
+    font-size: 1.4rem;
+    color: rgba(22, 24, 35, 0.75);
+}
+
+//
+
+.account-preview{
+    width: 320px;
+}

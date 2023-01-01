@@ -1,22 +1,33 @@
-import Home from "../pages/Home/index"
-import UserPage from "../pages/UserPage"
-
-import routesConfig from "../config/routes"
-import Mainlayout from "../layouts/Mainlayout"
-import UserLayout from "../layouts/UserlLayout"
+import Home from '../pages/Home/index';
+import UserPage from '../pages/UserPage';
+import Live from '../pages/Live';
+import Following from '../pages/Following';
+import routesConfig from '../config/routes';
+import Mainlayout from '../layouts/Mainlayout';
+import UserLayout from '../layouts/UserlLayout';
 const publicRoutes = [
     {
-        path : routesConfig.home,
-        component : Home,
-        layout : Mainlayout
+        path: routesConfig.home,
+        component: Home,
+        layout: Mainlayout,
     },
     {
-        path : routesConfig.profile,
-        component : UserPage,
-        layout : UserLayout
+        path: routesConfig.profile,
+        component: UserPage,
+        layout: UserLayout,
+    },
+    {
+        path: routesConfig.live,
+        component: Live,
+        layout: Mainlayout,
+    },
+    {
+        path: routesConfig.following,
+        component: Following,
+        layout: Mainlayout,
     }
-]
+];
 
-const privateRoutes = []
+const privateRoutes = [];
 
-export {publicRoutes,privateRoutes} 
+export { publicRoutes, privateRoutes };

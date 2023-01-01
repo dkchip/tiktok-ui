@@ -1,0 +1,53 @@
+.container{
+    width: 100%;
+    padding: 20px;
+}
+
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.avatar{
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+}
+
+.link{
+    font-size: 1.8rem;
+    font-weight: 600 ;
+    margin-right: 6px;
+}
+
+
+.full-name{
+    font-weight: 600;
+}
+
+.full-name{
+    font-size: 1.4rem;
+}
+
+.user-stat{
+    margin-top: 10px;
+    display: flex;
+
+}
+.follower,
+.likes{
+
+    font-size: 1.8rem;
+
+    & span{
+        color: rgba(22, 24, 35, 0.75);
+    }
+}
+
+
+
+.likes{
+    margin-left: 20px;
+}

@@ -1,0 +1,45 @@
+.menu{
+    width: 100%;
+
+}
+
+
+
+// Menu item
+.item{
+    padding: 8px;
+    display: flex;
+    align-items: center;
+
+    &:hover{
+        background-color: var(--background-color-hover);
+    }
+}
+
+.active{
+    color: var(--primary);
+
+    & .icon{
+        display: none;
+    }
+
+    & .active-icon{
+        display: flex;
+    }
+
+
+}
+
+.icon{
+    display: flex;
+}
+
+.title{
+    margin-left: 8px;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.active-icon{
+    display: none;
+}

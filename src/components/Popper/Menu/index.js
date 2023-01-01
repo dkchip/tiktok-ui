@@ -9,44 +9,51 @@ import Wrapper from '../Wrapper';
 import HeaderMenu from './HeaderMenu';
 const cx = classnames.bind(style);
 
-function Menu({ hideOnClick = false,children, items = [] }) {
+function Menu({ hideOnClick = false, children, items = [] }) {
     const [history, setHistory] = useState([{ data: items }]);
     const curent = history[history.length - 1];
 
     const renderItem = () => {
         return curent.data.map((item, index) => {
             const isParent = !!item.children;
-            return <MenuItem 
-                        key={index} 
-                        data={item} 
-                        onClick = {()=>{
-                            if(isParent){
-                                setHistory((prev) => [...prev,item.children])
-                            }else{
-
-                            }
-                        }}
-                    />;
+            return (
+                <MenuItem
+                    key={index}
+                    data={item}
+                    onClick={() => {
+                        if (isParent) {
+                            setHistory((prev) => [...prev, item.children]);
+                        } else {
+                        }
+                    }}
+                />
+            );
         });
+    };
+
+    const handleResetToFirstPage = () => {
+        setHistory((prev) => prev.slice(0, 1));
     };
 
     return (
         <Tippy
             placement="bottom-end"
             interactive
-            hideOnClick ={hideOnClick}
+            hideOnClick={hideOnClick}
             delay={[0, 800]}
-            onHide = {()=>{setHistory(prev => prev.slice(0,1))}}
+            onHide={handleResetToFirstPage}
             render={(attrs) => (
                 <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
                     <Wrapper>
-                        {history.length >1 && <HeaderMenu title={curent.title} 
-                                                           onBack = {()=>{
-                                                            setHistory(prev => prev.slice(0,prev.length-1))
-                                                            }}/> }
-                        <div className={cx('language-list')}>
-                            {renderItem()}
-                        </div>
+                        {history.length > 1 && (
+                            <HeaderMenu
+                                title={curent.title}
+                                onBack={() => {
+                                    setHistory((prev) => prev.slice(0, prev.length - 1));
+                                }}
+                            />
+                        )}
+                        <div className={cx('language-list')}>{renderItem()}</div>
                     </Wrapper>
                 </div>
             )}
@@ -57,9 +64,9 @@ function Menu({ hideOnClick = false,children, items = [] }) {
 }
 
 Menu.propTypes = {
-    hideOnClick : PropTypes.bool,
-    children : PropTypes.node.isRequired,
-    items : PropTypes.array
-}
+    hideOnClick: PropTypes.bool,
+    children: PropTypes.node.isRequired,
+    items: PropTypes.array,
+};
 
 export default Menu;
