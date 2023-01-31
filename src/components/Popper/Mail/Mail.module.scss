@@ -28,6 +28,8 @@
     background: rgba(22, 24, 35, 0.06);
     border-radius: 12px;
     transition: 0.3s ease-in;
+    user-select: none;
+
     &:hover{
         background: rgba(0, 0, 0, 0.12);
     }
@@ -39,6 +41,11 @@
 .active{
     color: rgb(255, 255, 255);
     background: rgb(22, 24, 35);
+
+    &:hover{
+         background: rgb(22, 24, 35);
+
+    }
 }
 
 // body mail bôx

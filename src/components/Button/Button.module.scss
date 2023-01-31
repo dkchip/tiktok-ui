@@ -22,6 +22,18 @@
     }
 }
 
+.outlinePrimary{
+    font-size: 1.6rem;
+    border: 1px solid var(--primary);
+    font-weight: 600;
+    color: var(--primary);
+
+    &:hover{
+        background:rgba(254, 44, 85, 0.06); ;
+    }
+
+}
+
 .outline{
     font-size: 1.6rem;
     border: 1px solid #ccc;
@@ -32,6 +44,41 @@
         background: var(--background-color-hover);
     }
 
+}
+
+.large{
+    width: 100%;
+    min-width: 168px;
+    min-height: 48px;
+    font-size: 1.6rem;
+    border: 1px solid var(--primary);
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover{
+        background:rgba(254, 44, 85, 0.06); ;
+    }
+}
+
+.primaryChange{
+
+    min-width: 168px;
+    min-height: 48px;
+    font-size: 1.6rem;
+    border: 1px solid var(--primary);
+    font-weight: 600;
+    color: var(--white);
+    background-color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover{
+        background:rgba(254, 44, 85, 0.06); ;
+    }
 }
 
 .icon + .title ,

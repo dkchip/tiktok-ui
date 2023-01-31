@@ -43,6 +43,15 @@ function Search() {
             });
     }, [debounce]);
 
+    const onChangeValue = (e) => {
+        if (!e.target.value.startsWith(' ')) {
+            setSearchValue(e.target.value);
+        }
+
+        if(e.target.value.length === 0) {
+            setSearchResult([]);
+        }
+    }
     return (
         <div>
             <HeadlessTippy
@@ -60,7 +69,7 @@ function Search() {
                             })}
                         </Wrapper>
                     </div>
-                )}
+                )} 
             >
                 <div className={cx('search')}>
                     <input
@@ -71,13 +80,7 @@ function Search() {
                         }}
                         type="text"
                         placeholder="Tìm kiếm tài khoản và video"
-                        onChange={(e) => {
-                            if (!e.target.value.startsWith(' ')) {
-                                setSearchValue(e.target.value);
-                            } else if (e.target.value.length === 0) {
-                                setSearchResult([]);
-                            }
-                        }}
+                        onChange={onChangeValue}
                     />
 
                     {searchValue && !loading && (

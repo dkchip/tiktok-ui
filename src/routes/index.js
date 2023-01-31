@@ -1,4 +1,4 @@
-import Home from '../pages/Home/index';
+import HomePage from '../pages/Home/index';
 import UserPage from '../pages/UserPage';
 import Live from '../pages/Live';
 import Following from '../pages/Following';
@@ -8,7 +8,7 @@ import UserLayout from '../layouts/UserlLayout';
 const publicRoutes = [
     {
         path: routesConfig.home,
-        component: Home,
+        component: HomePage,
         layout: Mainlayout,
     },
     {
@@ -19,7 +19,7 @@ const publicRoutes = [
     {
         path: routesConfig.live,
         component: Live,
-        layout: Mainlayout,
+        layout: UserLayout,
     },
     {
         path: routesConfig.following,

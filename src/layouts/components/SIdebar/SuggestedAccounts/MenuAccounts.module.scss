@@ -39,7 +39,12 @@
 }
 
 .nick-name{
-    font-size: 1.6rem;
+    font-size: 1.8rem;
+}
+
+.nick-name,
+.full-name{
+    line-height: 1.2;
 }
 
 .icon{
@@ -47,7 +52,7 @@
 }
 
 .full-name{
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: rgba(22, 24, 35, 0.75);
 }
 

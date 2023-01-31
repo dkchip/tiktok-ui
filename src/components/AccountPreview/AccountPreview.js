@@ -5,17 +5,25 @@ import Button from '../Button';
 import { Link } from 'react-router-dom';
 import { Ticker } from '../Icon';
 const cx = classNames.bind(styles);
-function AccountPreview({ data }) {
+function AccountPreview({ data, outline = false, primary = false, outlinePrimary = false }) {
+    const props = {
+        outline,
+        primary,
+        outlinePrimary,
+    };
+
     return (
         <div className={cx('container')}>
             <div className={cx('header')}>
-                <Link to={`@${data.nickname}`}>
-                    <Image className = {cx('avatar')} alt="" src={data.avatar} />   
+                <Link to={`/@${data.nickname}`}>
+                    <Image className={cx('avatar')} alt="" src={data.avatar} />
                 </Link>
-                <Button primary>Follow</Button>
+                <Button {...props}>Follow</Button>
             </div>
 
-            <Link className={cx('link')} to={`@${data.nickname}`}>{data.nickname}</Link>
+            <Link className={cx('link')} to={`@${data.nickname}`}>
+                {data.nickname}
+            </Link>
             {data.tick ? <Ticker /> : ''}
 
             <p className={cx('full-name')}>{data.first_name + ' ' + data.last_name}</p>
@@ -24,7 +32,7 @@ function AccountPreview({ data }) {
                     <b>
                         {data.followers_count} {data.followers_count > 1000000 ? 'M' : ''}
                     </b>
-                    <span >Follower</span>
+                    <span>Follower</span>
                 </p>
                 <p className={cx('likes')}>
                     <b>

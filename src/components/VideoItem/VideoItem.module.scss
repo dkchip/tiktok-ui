@@ -1,0 +1,199 @@
+.video-width{
+     width: calc(450px + ((100vw - 768px) / 1152) * 100);
+}
+
+.video-height{
+    height: calc(450px + (100vw - 768px) / 1152 * 100);
+}
+
+.z-index-image{
+    z-index: 11!important;
+}
+
+.hide{
+    display: none;
+}
+
+.wrapper{
+    width:592px;
+    max-width: 592px;
+    display: flex;
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+
+
+.avatar{
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+}
+
+.content-container{
+    margin-left: 10px;
+    width: 100%;
+}
+
+.header{
+    margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.link-profile{
+    display: flex;
+    align-items: center;
+
+    &:hover .nickname{
+        text-decoration: underline;
+    }
+}
+
+
+// tippy account preview
+.user-wrap{
+    width: 320px;
+}
+
+
+.full-name{
+    margin: 0 10px;
+}
+
+.music-video{
+    display: flex;
+    align-items: center;
+
+    &:hover .music-name {
+        text-decoration: underline;
+    }
+}
+
+.music-icon{
+    display: flex;
+    align-items: center;
+    margin-right: 6px;
+}
+
+.body{
+    display: flex;
+}
+
+.image{
+    width: 100%;
+    height: 100%;
+}
+
+.video-player{
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    position: relative;
+   border-radius: 10px;
+    cursor: pointer;
+    & video{
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        object-fit: contain;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+    }
+
+    &:hover .btn-wrap{
+        opacity: 1;
+    }
+}
+
+
+
+
+.action-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    & button {
+        margin: 6px 0 6px 10px;
+    }
+}
+
+.icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius:50% ;
+    width: 48px;
+    height: 48px;
+    background-color: rgba(22, 24, 35, .06);
+}
+
+
+.controls{
+    padding: 0 14px;
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    z-index: 20;
+    bottom: 0;
+}
+
+
+.btn-wrap{
+    transition: 0.4s;
+    opacity: 0;
+    align-items: flex-end;
+}
+
+// .btn-wrap,
+// .volume-control{
+//     position: relative;
+// }
+
+
+// Volume css
+
+.volume-control{
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+}
+
+
+.volume-container{
+    width: 24px;
+    height: 64px;
+    background-color: rgba(22, 24, 35, 0.34);
+    border-radius: 32px;
+    position: relative;
+    
+}
+
+.volume-progress{
+    position: absolute;
+    width: 2px;
+    height: 58px;
+    background-color: rgba(255, 255, 255, 0.34);
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%);
+    transform: translateY(-50%);
+    border-radius: 4px;
+}
+
+.volume-control-circle{
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--white);
+    left: 7px;
+    bottom: 0px;
+    cursor: pointer;
+}

@@ -9,10 +9,10 @@ import Wrapper from '../Wrapper';
 import HeaderMenu from './HeaderMenu';
 const cx = classnames.bind(style);
 
-function Menu({ hideOnClick = false, children, items = [] }) {
+function Menu({ hideOnClick = false, children, items = [] ,position}) {
     const [history, setHistory] = useState([{ data: items }]);
     const curent = history[history.length - 1];
-
+    const placeElement = position
     const renderItem = () => {
         return curent.data.map((item, index) => {
             const isParent = !!item.children;
@@ -37,7 +37,7 @@ function Menu({ hideOnClick = false, children, items = [] }) {
 
     return (
         <Tippy
-            placement="bottom-end"
+            placement={placeElement || "bottom-end"}
             interactive
             hideOnClick={hideOnClick}
             delay={[0, 800]}

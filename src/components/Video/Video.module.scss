@@ -1,0 +1,26 @@
+
+.image-video{
+    border-radius: 10px;
+    object-fit: cover;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1 ;
+}
+
+
+.video {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    & video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        cursor: pointer;
+        object-fit: cover;
+    }
+}

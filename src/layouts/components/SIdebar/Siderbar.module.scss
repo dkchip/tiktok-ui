@@ -21,14 +21,59 @@
    
 }
 
-.wrapper{
-    width: 356px;
-    padding: 20px 0 26px;
+.abc{
+    overflow: hidden auto;
+    overscroll-behavior-y: contain;
+    perspective: 1px;
+    transform-style: preserve-3d;
+    perspective-origin: right top;
+    top: 62px;
+    bottom: 0px;
+    width: 240px;
+    background: rgb(255, 255, 255);
     position: fixed;
-    overflow-y: scroll;
-    top: 60px;
-    bottom: 0;
-    z-index: 99;
+    z-index: 98;
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background-color: rgba(22, 24, 35, .06);;
+    }
+
+}
+.wrapper{
+  
+    flex-shrink: 0;
+    padding: 20px 0 26px;
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-align-items: stretch;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    min-height: 100%;
+    padding-left: 8px;
+
+  
+}
+
+.log-in{
+    width: 100%;
+    padding: 16px 10px;
+    position: relative;
+}
+
+.title{
+    color: rgba(22, 24, 35, .5);
+    font-size: 1.6rem;
+    line-height: 22px;
 }
 
 .user-suggest-container{
@@ -41,7 +86,7 @@
 
 
 .btn{
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 600;
     margin-left: 14px;
     color: rgb(254, 44, 85);
@@ -65,10 +110,12 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    position: relative;
+    padding: 16px 0;
 }
 
 .discover-item{
-    position: relative;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,7 +124,7 @@
     border: 1px solid #ccc;
     border-radius: 20px;
     margin-bottom: 10px;
-    margin-right: 6px;
+    margin-right: 8px;
     color: rgba(22, 24, 35, 0.75);
     transition: 0.4s;
     &:hover{
@@ -96,5 +143,21 @@
 
     & i {
         display: flex;
+    }
+}
+
+.footer{
+    position: relative;
+    width: 100%;
+    padding: 6px 0;
+}
+
+.footer-link{
+    font-size: 1.2rem;
+    color: rgba(22, 24, 35, .5);
+    margin-right: 8px;
+    font-weight: 600;
+    &:hover{
+        text-decoration: underline;
     }
 }

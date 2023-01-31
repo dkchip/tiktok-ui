@@ -11,7 +11,6 @@ function Mainlayout({ children }) {
     return (
         <div className={cx('Wrapper')}>
             <Header></Header>
-
             <div className={cx('body')}>
                 <Sidebar></Sidebar>
                 <div className={cx('container')}>

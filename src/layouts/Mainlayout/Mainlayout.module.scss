@@ -1,6 +1,11 @@
+.Wrapper{
+    width: auto;
+    height: auto;
+}
+
 .body{
     margin: 60px auto 0 auto;
-    width: 1150px;
+    width: var(--width-home-page);
     display: flex;
     justify-content: space-between;
 }

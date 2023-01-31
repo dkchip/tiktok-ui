@@ -25,6 +25,8 @@ import Image from '../../../components/Image';
 import Search from '../Search';
 import Mail from '../../../components/Popper/Mail';
 import { Link } from 'react-router-dom';
+import {curentUser} from  '../../curentUser.js'
+
 
 const cx = classnames.bind(style);
 const MENU_ITEM = [
@@ -83,10 +85,9 @@ const userMenu =[
     }
 ]
 
-const curentUser = true;
 
 
-function Header() {
+function Header({wider}) {
     const [visible,setVisible] = useState(false)
     const show = () =>{
         setVisible(true)
@@ -96,9 +97,9 @@ function Header() {
     }
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('inner')}>
+            <div className={cx('inner')} style = {{width : wider ? '100%' : '1150px'}}>
                 <div className={cx('logo')}>
-                    <Link className={cx('logo-link')} to={routesConfig.home}>
+                    <Link className={cx('logo-link')} to={routesConfig.home} onClick="refresh">
                         <img src={images.logo} alt="logo tiktok"></img>
                     </Link>
                 </div>
