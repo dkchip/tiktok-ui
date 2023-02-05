@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
+import ButtonBottom from '../../components/ButtonBottom/ButtonBottom';
 import styles from './HomePage.module.scss';
 import classNames from 'classnames/bind';
 import request from '../../utils/request';
@@ -10,10 +11,12 @@ import VideoItem from '../../components/VideoItem/VideoItem';
 const cx = classNames.bind(styles);
 
 function HomePage() {
-
+    document.title = "Tiktok - Make your day"
     const [dataVideo, setDataVideo] = useState([]);
     const [page, setPage] = useState(1);
     const [volume, setVolume] = useState(0);
+    
+
     const loadMore = useCallback(() => {
         return setTimeout(() => {
             request
@@ -74,6 +77,7 @@ function HomePage() {
                     }}
                 />
             </div>
+            <ButtonBottom />
         </div>
     );
 }

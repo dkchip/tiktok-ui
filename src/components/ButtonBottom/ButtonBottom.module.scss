@@ -1,0 +1,36 @@
+
+.bottom-30{
+    bottom: 10px !important;
+  }
+
+.bottom-container{
+    position: fixed;
+    z-index: 999999;
+    bottom: -38px;
+    right: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    transition: 0.4s;
+  }
+  
+  .btn-dowload{
+    padding: 6px 8px;
+    border: 1px solid rgba(22, 24, 35, .12);
+    border-radius: 52px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+    font-weight: 600;
+    background-color: var(--white);
+    color: rgba(22, 24, 35, .75);
+    &:hover{
+      border-color: rgba(22, 24, 35, .2);
+    }
+  }
+  
+  .btn-scroll-top{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--primary);
+  }

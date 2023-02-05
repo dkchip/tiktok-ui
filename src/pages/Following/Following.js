@@ -1,11 +1,13 @@
 import styles from './Following.module.scss';
 import classNames from 'classnames/bind';
 
+import ButtonBottom from '../../components/ButtonBottom/ButtonBottom'
 import { useEffect, useState } from 'react';
 import { getSuggestedUsers } from '../../services/userServices';
 import CardPlayerItem from './CardPlayerItem';
 const cx = classNames.bind(styles);
 function Following() {
+    document.title = "Tiktok - Make your day"
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -24,6 +26,7 @@ function Following() {
                     );
                 })}
             </div>
+            <ButtonBottom />
         </div>
     ) : (
         <></>

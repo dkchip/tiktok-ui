@@ -24,7 +24,7 @@ import Button from '../../components/Button';
 import Menu from '../../components/Popper/Menu';
 import { useState } from 'react';
 // import { Link } from 'react-router-dom';
-
+import ButtonBottom from '../../components/ButtonBottom/ButtonBottom';
 import VideosProfile from './VideosProfile';
 import LikedProfile from './LikedProfile';
 
@@ -102,10 +102,13 @@ const MENU_REPORTS = [
     },
 ];
 function UserPage() {
+
+
     const [data, setData] = useState(null);
     const [isActive, setIsActive] = useState('video');
     const user = useParams();
-
+    const fullName = data ? (`${(data.first_name ? data.first_name : "") + ' '+ (data.last_name ? data.last_name : '')}`) : null
+   
     useEffect(() => {
         request
             .get(`users/@${user.nickname}`)
@@ -114,7 +117,12 @@ function UserPage() {
             });
         
         
+        
+    
     }, [user.nickname]);
+
+    document.title = data ? (`${fullName} (@${data.nickname}) | TikTok`) : "Tiktok - Make your day"
+
     const setActiveTab = (value) => {
         setIsActive(value);
     };
@@ -201,6 +209,7 @@ function UserPage() {
                     </div>
                 </div>
             </div>
+            <ButtonBottom></ButtonBottom>
         </div>
     ) : (
         <div className={cx('')}></div>

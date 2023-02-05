@@ -1,13 +1,21 @@
-import styles from './Live.modeule,.scss'
+import styles from './Live.module.scss'
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
 function Live() {
+    document.title = "Tiktok - Make your day"
     return ( 
-        <div classNames={cx("wrapper")}>
-            <div classNames={cx("container")}>
-                <div classNames={cx("bgr-image")}></div>
-                <div></div>
+        <div className={cx("wrapper")}>
+            <div className={cx("container")}>
+                <div className={cx("bgr-image")}></div>
+                <div className = {cx("content")}>
+                    <h1 className={cx("heading")}>
+                        SẮP <br/> RA MẮT
+                    </h1>
+                    <span className={cx("title")}>
+                        Thằng làm web còn non nên cứ từ từ !
+                    </span>
+                </div>
             </div>
         </div>
      );
