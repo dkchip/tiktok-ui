@@ -1,6 +1,15 @@
+import styles from './Live.modeule,.scss'
+import classNames from 'classnames/bind'
+
+const cx = classNames.bind(styles)
 function Live() {
     return ( 
-        <h1>Live Page</h1>
+        <div classNames={cx("wrapper")}>
+            <div classNames={cx("container")}>
+                <div classNames={cx("bgr-image")}></div>
+                <div></div>
+            </div>
+        </div>
      );
 }
 
