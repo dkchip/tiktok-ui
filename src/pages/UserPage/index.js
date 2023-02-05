@@ -128,7 +128,7 @@ function UserPage() {
                             <h2 className={cx('nick-name')}>
                                 {data.nickname} <Ticker />
                             </h2>
-                            <h3 className={cx('full-name')}>{data.fisrt_name + ' ' + data.last_name}</h3>
+                            <h3 className={cx('full-name')}>{data.first_name + ' ' + data.last_name}</h3>
                             <Button primary>Follow</Button>
                         </div>
                     </div>

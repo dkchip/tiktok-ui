@@ -94,3 +94,19 @@ a{
     src: url('../../asset/fonts/sofiapro-semibold.otf');
     font-weight: 700;
 }
+
+
+.Modal {
+    position: absolute;
+  inset :0;
+    background-color: papayawhip;
+  }
+
+.Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }

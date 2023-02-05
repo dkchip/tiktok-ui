@@ -1,0 +1,43 @@
+.hide{
+    display: none;
+}
+
+
+.wrapper{
+    width: 100%;
+    text-align: center;
+    overflow-y: scroll;
+}
+
+.content{
+    margin-top: 20px;
+}
+
+.list{
+    display: flex;
+    flex-direction: column;
+}
+
+.btn{
+    
+    display: block;
+    margin-bottom: 16px;
+
+    & a{
+        padding: 8px 0;
+    }
+ 
+    & i{
+        font-size: 2rem;
+        margin-left: 10px;
+    }
+    & span{
+        margin-left: 80px !important;
+
+    }
+}
+
+.icon{
+    font-size: 2.4rem;
+    cursor: pointer;
+}

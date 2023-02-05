@@ -15,6 +15,8 @@ import {
         faGear
       } from '@fortawesome/free-solid-svg-icons';
 
+import Modal from '../../../components/Modal/Modal';
+import useModal from '../../../hooks/useModal';
 import routesConfig from '../../../config/routes';
 import { MessageIcon,InboxIcon } from '../../../components/Icon';
 import style from './Header.module.scss';
@@ -26,7 +28,6 @@ import Search from '../Search';
 import Mail from '../../../components/Popper/Mail';
 import { Link } from 'react-router-dom';
 import {curentUser} from  '../../curentUser.js'
-
 
 const cx = classnames.bind(style);
 const MENU_ITEM = [
@@ -43,8 +44,7 @@ const MENU_ITEM = [
                 {
                     title : 'English',
                     code : 'en'
-                }        
-
+                } 
             ]
         }
     },
@@ -86,15 +86,17 @@ const userMenu =[
 ]
 
 
-
 function Header({wider}) {
+    const {isShowing,toggle} = useModal();
     const [visible,setVisible] = useState(false)
+
     const show = () =>{
         setVisible(true)
     }
     const hide = () =>{
         setVisible(false)
     }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner')} style = {{width : wider ? '100%' : '1150px'}}>
@@ -121,7 +123,6 @@ function Header({wider}) {
                                        <InboxIcon />
                                     </button>
                                 </Mail>
-
                             
                            </> 
                     ) 
@@ -129,8 +130,8 @@ function Header({wider}) {
                     (
                         <>
                             <Button outline  iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button>
-                            <Button primary >Đăng nhập</Button>
-
+                            <Button onClick={toggle}  primary >Đăng nhập</Button>
+                            
                         </>
                     )}
                     <Menu items = {curentUser ? userMenu: MENU_ITEM}>
@@ -153,6 +154,7 @@ function Header({wider}) {
                     </Menu>
                 </div>
             </div>
+            <Modal isShowing={isShowing} hide ={toggle}></Modal>   
         </div>
     );
 }

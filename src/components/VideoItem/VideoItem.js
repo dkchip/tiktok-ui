@@ -3,31 +3,85 @@ import { Link } from 'react-router-dom';
 import { useElementOnScreen } from '../../hooks';
 import Tippy from '@tippyjs/react/headless';
 
-import Menu from '../Popper/Menu';
-import Button from '../Button';
-import {Wrapper} from '../../components/Popper'
-import AccountPreview from '../AccountPreview/AccountPreview';
-import Image from '../Image';
-import styles from './VideoItem.module.scss';
-import classNames from 'classnames/bind';
 import {
+    LinkIcon,
+    ShareIcon,
     Ticker,
+    DipIcon,
+    WhatsAppIcon,
+    TwitterIcon,
+    LinkedIcon,
+    RedditIcon,
+    TelegramIcon,
+    FacebookIcon,
     MusicIcon,
     LikeIcon,
     //  LikeIconActive,
     CommentIcon,
-    ShareIcon,
     PlayIcon,
     PauseIcon,
-    // VolumeOffIcon,
+    VolumeOffIcon,
     VolumeOnIcon,
 } from '../Icon';
+import Menu from '../Popper/Menu';
+import Button from '../Button';
+import { Wrapper } from '../../components/Popper';
+import AccountPreview from '../AccountPreview/AccountPreview';
+import Image from '../Image';
+import styles from './VideoItem.module.scss';
+import classNames from 'classnames/bind';
+import Modal from '../Modal/Modal';
+import useModal from '../../hooks/useModal';
 
 const cx = classNames.bind(styles);
 
-function VideoItem({ data }) {
-    const [playing, setPlaying] = useState(false);
+const MENU_SHARE = {
+    items: [
+        {
+            title: 'Nhúng',
+            icon: <DipIcon />,
+            path: '/',
+        },
+        {
+            title: 'Chia sẻ Facebook',
+            icon: <FacebookIcon />,
+            path: '/',
+        },
+        {
+            title: 'Chia sẻ với WhatsApp',
+            icon: <WhatsAppIcon />,
+            path: '/',
+        },
+        {
+            title: 'Chia sẻ với Twitter',
+            icon: <TwitterIcon />,
+            path: '/',
+        },
+        {
+            title: 'Sao chép liên kết',
+            icon: <LinkIcon />,
+            path: '/',
+        },
+        {
+            title: 'Chia sẻ với LikedIn',
+            icon: <LinkedIcon />,
+            path: '/',
+        },
+        {
+            title: 'Chia sẻ với Reddit',
+            icon: <RedditIcon />,
+            path: '/',
+        },
+        {
+            title: 'Chia sẻ với Telegram',
+            icon: <TelegramIcon />,
+            path: '/',
+        },
+    ],
+};
 
+function VideoItem({ data, onChangeVolume, volume,setVolume }) {
+    const [playing, setPlaying] = useState(false);
     const videoRef = useRef(null);
     const options = {
         root: null,
@@ -49,6 +103,7 @@ function VideoItem({ data }) {
             if (!playing) {
                 // set curentTime video = 0;
                 videoRef.current.currentTime = 0;
+
                 videoRef.current.play();
                 setPlaying(true);
             }
@@ -61,29 +116,34 @@ function VideoItem({ data }) {
         // eslint-disable-next-line
     }, [isVisibile]);
 
-    // function handleVolume(e) {
-    //     console.log(e);
-    // }
+    const { isShowing, toggle } = useModal();
+    const handleVolume = ()=>{
+        if(volume === 0 ){
+            setVolume(0.5)
+        }else{
+            setVolume(0)
+        }
+    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('avatar-wrap')}>
-                <Tippy 
-                    placement='bottom-start'
-                    interactive = {true}
-                    delay={[400,400]}
-                    render={attrs =>(
+                <Tippy
+                    placement="bottom-start"
+                    interactive={true}
+                    delay={[400, 400]}
+                    render={(attrs) => (
                         <div className={cx('user-wrap')} {...attrs}>
                             <Wrapper>
-                                <AccountPreview data ={data.user} outlinePrimary />
+                                <AccountPreview data={data.user} outlinePrimary />
                             </Wrapper>
                         </div>
                     )}
                 >
                     <Link to={`/@${data.user.nickname}`}>
-                        <Image className={cx('avatar')}  src={data.user.avatar}></Image>
+                        <Image className={cx('avatar')} src={data.user.avatar}></Image>
                     </Link>
                 </Tippy>
-                
             </div>
 
             <div className={cx('content-container')}>
@@ -103,7 +163,10 @@ function VideoItem({ data }) {
                         </Link>
                     </div>
                     <div className={cx('btn')}>
-                        <Button outlinePrimary >Follow</Button>
+                        <Button onClick={toggle} outlinePrimary>
+                            Follow
+                        </Button>
+                        <Modal isShowing={isShowing} hide={toggle}></Modal>
                     </div>
                 </div>
                 <div className={cx('body')}>
@@ -117,15 +180,17 @@ function VideoItem({ data }) {
                             }`,
                         )}
                     >
-                        <img className={cx('image',`${playing === false ? "z-index-image" :""}`)} src={data.thumb_url} alt="" />
+                        <img
+                            className={cx('image', `${playing === false ? 'z-index-image' : ''}`)}
+                            src={data.thumb_url}
+                            alt=""
+                        />
                         <video
-                            // className={cx(`${onHide === true? 'hide' : ''}`)}
                             muted={true}
                             ref={videoRef}
                             onClick={onVideoClick}
-                            // controls
                             loop
-                            playsInline
+                            playsInline={true}
                             poster={data.thumb_url}
                         >
                             <source src={data.file_url} type="video/mp4" />
@@ -141,17 +206,28 @@ function VideoItem({ data }) {
                                 </button>
                             </div>
                             <div className={cx('volume-control')}>
-                                {/* <div className={cx('volume-container')}>
-                                    <div className={cx('volume-progress')} onMouseDown = {handleVolume}></div>
-                                    <div className = {cx('volume-control-circle')}  ></div>
-                                    <div className={cx('volume-bar')}></div>
-                                </div> */}
-                                <button className={cx('volume-on')}>
-                                    <VolumeOnIcon />
-                                </button>
-                                {/* <button className={cx('volume-off')}>
-                                    <VolumeOffIcon />
-                                </button> */}
+                                <div className={cx('volume-container')}>
+                                    <input
+                                        onChange={(e) => {
+                                            onChangeVolume(e);
+                                            videoRef.current.volume = volume;
+                                        }}
+                                        value={volume * 100}
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        step="1"
+                                    ></input>
+                                </div>
+                                {volume === 0 ? (
+                                    <button onClick={handleVolume} className={cx('volume-off')}>
+                                        <VolumeOffIcon />
+                                    </button>
+                                ) : (
+                                    <button onClick={handleVolume} className={cx('volume-on')}>
+                                        <VolumeOnIcon />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -169,21 +245,19 @@ function VideoItem({ data }) {
                             </i>
                             <p className={'comment-count'}>{data.comments_count}</p>
                         </button>
-                        <button>
-                    
-                            <i className={cx('icon')}>
-                                <ShareIcon />
-                            </i>
-                            <p className={cx('share-count')}>{data.shares_count}</p>
-                       
-                        </button>
+                        <Menu items={MENU_SHARE.items} position={'top-start'}>
+                            <button>
+                                <i className={cx('icon')}>
+                                    <ShareIcon />
+                                </i>
+                                <p className={cx('share-count')}>{data.shares_count}</p>
+                            </button>
+                        </Menu>
                     </div>
                 </div>
             </div>
-            
         </div>
     );
 }
 
 export default VideoItem;
-

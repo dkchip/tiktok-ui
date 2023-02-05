@@ -10,9 +10,10 @@ import VideoItem from '../../components/VideoItem/VideoItem';
 const cx = classNames.bind(styles);
 
 function HomePage() {
+
     const [dataVideo, setDataVideo] = useState([]);
     const [page, setPage] = useState(1);
-
+    const [volume, setVolume] = useState(0);
     const loadMore = useCallback(() => {
         return setTimeout(() => {
             request
@@ -36,6 +37,10 @@ function HomePage() {
         return () => clearTimeout(timeout);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const handleVolume = (e) => {
+        setVolume(e.target.value / 100);
+    };
+
     return (
         <div className={'wrapper'}>
             <div className={cx('content')}>
@@ -45,12 +50,20 @@ function HomePage() {
                     endReached={() => {
                         loadMore();
                     }}
-                    itemContent={(index, data) => <VideoItem key={index} data={data} />}
+                    itemContent={(index, data) => (
+                        <VideoItem key={index}
+                                    data={data}
+                                    volume={volume} 
+                                    onChangeVolume={handleVolume}
+                                    setVolume={setVolume} 
+      
+                        />
+                    )}
                     components={{
                         Footer: () => {
                             return (
-                                <div className={cx("loadingio-spinner-dual-ball-lwjvw2p7xft")}>
-                                    <div className={cx("ldio-ol68y82xof9")}>
+                                <div className={cx('loadingio-spinner-dual-ball-lwjvw2p7xft')}>
+                                    <div className={cx('ldio-ol68y82xof9')}>
                                         <div></div>
                                         <div></div>
                                         <div></div>

@@ -14,11 +14,14 @@ import {
     UserGroupActiveIcon,
     LiveIcon,
     LiveActiveIcon,
+    TagIcon,
+    MusicIcon,
 } from '../../../components/Icon';
 import request from '../../../utils/request';
-import { TagIcon, MusicIcon } from '../../../components/Icon';
 import { curentUser } from '../../curentUser.js';
 import Button from '../../../components/Button';
+import useModal from '../../../hooks/useModal';
+import Modal from '../../../components/Modal/Modal';
 
 const cx = classnames.bind(style);
 const LIST_DISCOVER = [
@@ -105,6 +108,8 @@ function Sidebar({ wider }) {
     const [data, setData] = useState([]);
     let [quantity, setQuantity] = useState(5);
     let [accFollowings, setAccFollowing] = useState([]);
+    const {isShowing,toggle} = useModal();
+
     useEffect(() => {
         request
             .get('users/suggested', {
@@ -169,7 +174,8 @@ function Sidebar({ wider }) {
                                 <span className={cx('title')}>
                                     Đăng nhập để follow các tác giả, thích video và xem bình luận.
                                 </span>
-                                <Button large>Đăng nhập</Button>
+                                <Button onClick ={toggle} large>Đăng nhập</Button>
+                                <Modal isShowing={isShowing} hide ={toggle}></Modal>   
                             </div>
                         </div>
 
