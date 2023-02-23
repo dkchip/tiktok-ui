@@ -10,7 +10,7 @@ const Image = forwardRef(({src,alt,...props},ref) => {
         setFallBack(images.noImage)
     }
 
-    return ( <img ref={ref} src = {_fallBack || src} alt = {alt}  {...props} onError = {handleErro} /> );
+    return ( <img ref={ref} src = {_fallBack || src} alt = {alt}  {...props}  onError = {handleErro} /> );
 })
 
 Image.propTypes = {

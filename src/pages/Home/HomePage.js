@@ -40,9 +40,6 @@ function HomePage() {
         return () => clearTimeout(timeout);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleVolume = (e) => {
-        setVolume(e.target.value / 100);
-    };
 
     return (
         <div className={'wrapper'}>
@@ -57,7 +54,6 @@ function HomePage() {
                         <VideoItem key={index}
                                     data={data}
                                     volume={volume} 
-                                    onChangeVolume={handleVolume}
                                     setVolume={setVolume} 
       
                         />

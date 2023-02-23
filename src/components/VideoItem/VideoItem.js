@@ -80,15 +80,19 @@ const MENU_SHARE = {
     ],
 };
 
-function VideoItem({ data, onChangeVolume, volume,setVolume }) {
+function VideoItem({ data, volume, setVolume }) {
+
     const [playing, setPlaying] = useState(false);
     const videoRef = useRef(null);
+
     const options = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.7,
+        threshold: 0.6,
     };
     const isVisibile = useElementOnScreen(options, videoRef);
+    // const playPromise = videoRef.current.play();
+    
     const onVideoClick = () => {
         if (playing) {
             videoRef.current.pause();
@@ -98,14 +102,25 @@ function VideoItem({ data, onChangeVolume, volume,setVolume }) {
             setPlaying(!playing);
         }
     };
+
+    // if (playPromise !== undefined) {
+    //     playPromise.then(() => {});
+    // }
+    const playPromise = videoRef.current;
+
+    async function playVideo(){
+        videoRef.current.currentTime = 0;
+               await videoRef.current.play();
+                setPlaying(true);
+    }
+
     useEffect(() => {
         if (isVisibile) {
-            if (!playing) {
+    
+            if (!playing && playPromise !== undefined) {
                 // set curentTime video = 0;
-                videoRef.current.currentTime = 0;
-
-                videoRef.current.play();
-                setPlaying(true);
+                playVideo();
+                
             }
         } else {
             if (playing) {
@@ -116,14 +131,23 @@ function VideoItem({ data, onChangeVolume, volume,setVolume }) {
         // eslint-disable-next-line
     }, [isVisibile]);
 
-    const { isShowing, toggle } = useModal();
-    const handleVolume = ()=>{
-        if(volume === 0 ){
-            setVolume(0.5)
-        }else{
-            setVolume(0)
+    useEffect(()=>{
+        videoRef.current.volume = volume;
+    },[volume])
+    
+    const handleVolume = () => {
+        if (volume === 0) {
+            setVolume(0.5);
+        } else {
+            setVolume(0);
         }
-    }
+    };
+    useEffect(()=>{
+        
+    })
+
+    const { isShowing, toggle } = useModal();
+   
 
     return (
         <div className={cx('wrapper')}>
@@ -186,12 +210,13 @@ function VideoItem({ data, onChangeVolume, volume,setVolume }) {
                             alt=""
                         />
                         <video
-                            muted={true}
+                            muted={false}
                             ref={videoRef}
                             onClick={onVideoClick}
                             loop
                             playsInline={true}
                             poster={data.thumb_url}
+                            
                         >
                             <source src={data.file_url} type="video/mp4" />
                             Your browser does not support HTML video.
@@ -209,14 +234,16 @@ function VideoItem({ data, onChangeVolume, volume,setVolume }) {
                                 <div className={cx('volume-container')}>
                                     <input
                                         onChange={(e) => {
-                                            onChangeVolume(e);
+                                            setVolume(e.target.value);
+
                                             videoRef.current.volume = volume;
+        
                                         }}
-                                        value={volume * 100}
+                                        value={volume}
                                         type="range"
                                         min="0"
-                                        max="100"
-                                        step="1"
+                                        max="1"
+                                        step="0.1"
                                     ></input>
                                 </div>
                                 {volume === 0 ? (

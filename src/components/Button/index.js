@@ -19,6 +19,7 @@ function Button({
     small = false,
     large = false,
     onclick,
+    disabled,
     ...passProps
 }) {
     let Comp = 'button';
@@ -34,17 +35,31 @@ function Button({
         Comp = 'a';
     }
 
+    if(disabled){
+        Object.keys(props).forEach((key) =>{
+            if(key.startsWith('on') && typeof props[key] === 'function'){
+                delete props[key];
+                this.preventDefault();
+            }
+
+        })
+    }
+
+    const disabledEvent = (e)=>{
+        e.preventDefault();
+    }
     const classname = cx('wrapper', {
         primary,
         small,
         large,
         outline,
         outlinePrimary,
-        primaryChange
+        primaryChange,
+        disabled
     });
 
     return (
-        <Comp className={classname} {...props}>
+        <Comp className={classname} onClick = {onclick ? onclick : disabledEvent} {...props}>
             {iconLeft && <i className={cx('icon')}>{iconLeft}</i>}
             <span className={cx('title')}>{children}</span>
             {iconRight && <i className={cx('icon')}>{iconRight}</i>}

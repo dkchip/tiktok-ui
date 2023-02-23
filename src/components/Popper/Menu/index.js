@@ -40,7 +40,7 @@ function Menu({ hideOnClick = false, children, items = [], position }) {
             placement={placeElement || 'bottom-end'}
             interactive
             hideOnClick={hideOnClick}
-            delay={[0, 800]}
+            delay={[0, 500]}
             onHide={handleResetToFirstPage}
             render={(attrs) => (
                 <div className={cx('menu-list')} tabIndex="-1" {...attrs}>

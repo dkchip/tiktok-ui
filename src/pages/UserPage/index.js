@@ -19,7 +19,7 @@ import {
 } from '../../components/Icon';
 import classNames from 'classnames/bind';
 import styles from './UserPage.module.scss';
-import Image from '../../components/Image';
+// import Image from '../../components/Image';
 import Button from '../../components/Button';
 import Menu from '../../components/Popper/Menu';
 import { useState } from 'react';
@@ -108,7 +108,8 @@ function UserPage() {
     const [isActive, setIsActive] = useState('video');
     const user = useParams();
     const fullName = data ? (`${(data.first_name ? data.first_name : "") + ' '+ (data.last_name ? data.last_name : '')}`) : null
-   
+    
+
     useEffect(() => {
         request
             .get(`users/@${user.nickname}`)
@@ -120,7 +121,7 @@ function UserPage() {
         
     
     }, [user.nickname]);
-
+    
     document.title = data ? (`${fullName} (@${data.nickname}) | TikTok`) : "Tiktok - Make your day"
 
     const setActiveTab = (value) => {
@@ -131,7 +132,7 @@ function UserPage() {
             <div className={cx('header')}>
                 <div className={cx('info')}>
                     <div className={cx('share-info')}>
-                        <Image className={cx('image')} src={data.avatar} />
+                        <img className={cx('image')} src={data.avatar} alt = '' />
                         <div className={cx('title-container')}>
                             <h2 className={cx('nick-name')}>
                                 {data.nickname} <Ticker />

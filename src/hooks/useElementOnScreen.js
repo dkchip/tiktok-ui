@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+
 const useElementOnScreen = (options, targetRef) => {
     const [isVisibile, setIsVisible] = useState()
     const callbackFunction = entries => {
@@ -8,9 +9,11 @@ const useElementOnScreen = (options, targetRef) => {
     const optionsMemo = useMemo(() => {
         return options
     }, [options])
+
     useEffect(() => {
         const observer = new IntersectionObserver(callbackFunction, optionsMemo)
         const currentTarget = targetRef.current
+        
         if (currentTarget) observer.observe(currentTarget)
 
         return () => {

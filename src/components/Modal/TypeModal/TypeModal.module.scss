@@ -6,7 +6,6 @@
 .wrapper{
     width: 100%;
     text-align: center;
-    overflow-y: scroll;
 }
 
 .content{
@@ -40,4 +39,29 @@
 .icon{
     font-size: 2.4rem;
     cursor: pointer;
+}
+
+// QR CODE
+.content-qrcode{
+    margin-top: 20px;
+    display: flex;
+}
+
+.QR-code,
+.image-tip{
+    width: 50%;
+
+    & img{
+        width: 100%;
+    }
+}
+
+.QR-code{
+    display: flex;
+    flex-direction: column;
+}
+
+.intrucstion{
+    text-align: left;
+    font-size: 1.4rem;
 }
