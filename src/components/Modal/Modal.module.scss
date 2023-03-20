@@ -4,8 +4,11 @@
     justify-content: center;
     inset: 0;
     position: fixed;
-    z-index: 9999999;
+    z-index: 99999999;
 
+    & .hide{
+        display: none;
+    }
 
 }
 
@@ -53,6 +56,46 @@
     height: 458px;
     overflow: overlay;
 }
+
+
+.container{
+    width: 100%;
+    text-align: center;
+}
+
+.content-sub{
+    margin-top: 20px;
+}
+
+.list{
+    display: flex;
+    flex-direction: column;
+}
+
+.btn{
+    
+    display: block;
+    margin-bottom: 16px;
+
+    & a{
+        padding: 8px 0;
+    }
+ 
+    & i{
+        font-size: 2rem;
+        margin-left: 10px;
+    }
+    & span{
+        margin-left: 80px !important;
+
+    }
+}
+
+.icon{
+    font-size: 2.4rem;
+    cursor: pointer;
+}
+
 
 .footer{
     height: 64px;

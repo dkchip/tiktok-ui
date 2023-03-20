@@ -5,7 +5,7 @@ import { faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames/bind';
 import { SearchIcon } from '../../../components/Icon';
 
-import request from '../../../utils/request';
+import { getSearchUsers } from '../../../services/userServices';
 import AccountItem from '../../../components/AccountItem';
 import { Wrapper } from '../../../components/Popper';
 import style from './Search.module.scss';
@@ -27,20 +27,12 @@ function Search() {
             return;
         }
         setLoading(true);
-        request
-            .get(`users/search`, {
-                params: {
-                    q: debounce,
-                    type: `less`,
-                },
+        getSearchUsers(debounce,"less")
+            .then((res)=>{
+                setSearchResult(res.data)
             })
-            .then((res) => {
-                setSearchResult(res.data.data);
-                setLoading(false);
-            })
-            .catch(() => {
-                setLoading(false);
-            });
+
+        
     }, [debounce]);
 
     const onChangeValue = (e) => {

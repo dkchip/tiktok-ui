@@ -23,7 +23,8 @@ function Menu({ hideOnClick = false, children, items = [], position }) {
                     onClick={() => {
                         if (isParent) {
                             setHistory((prev) => [...prev, item.children]);
-                        } else {
+                        } else if(!!item.onClick) {
+                            item.onClick();
                         }
                     }}
                 />

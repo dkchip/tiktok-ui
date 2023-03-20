@@ -5,46 +5,10 @@ import styles from './TypeModal.module.scss';
 import Button from '../../Button';
 
 import {
-    UserIcon,
-    FacebookIcon,
-    GoogleIcon,
-    TwitterIcon,
-    LineIcon,
-    KakaoTalkIcon,
+   
 } from '../../Icon';
 const cx = classNames.bind(styles);
-const MENU_REGISTER = [
-    {
-        title: 'Sử dụng số điện thoại hoặc email',
-        icon: <UserIcon />,
-        path: '/',
-    },
-    {
-        title: 'Tiếp tục với Facebook',
-        icon: <FacebookIcon />,
-        path: '/',
-    },
-    {
-        title: 'Tiếp tục với Google',
-        icon: <GoogleIcon />,
-        path: '/',
-    },
-    {
-        title: 'Tiếp tục với Twitter',
-        icon: <TwitterIcon />,
-        path: '/',
-    },
-    {
-        title: 'Tiếp tục với Line',
-        icon: <LineIcon />,
-        path: '/',
-    },
-    {
-        title: 'Tiếp tục với KakaoTalk',
-        icon: <KakaoTalkIcon />,
-        path: '/',
-    },
-];
+
 function Register() {
     const [quantity , setQuantity] = useState(3)
     return (
@@ -55,7 +19,7 @@ function Register() {
                     {MENU_REGISTER.slice(0,quantity).map((item, index) => {
                         return (
                             <div key={index} className={cx('btn')}>
-                                <Button to={item.path} outline iconLeft={item.icon}>
+                                <Button  outline iconLeft={item.icon}>
                                     {item.title}
                                 </Button>
                             </div>

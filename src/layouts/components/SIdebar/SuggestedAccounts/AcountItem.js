@@ -7,9 +7,35 @@ import { Ticker } from '../../../../components/Icon';
 import classNames from 'classnames/bind';
 import styles from './MenuAccounts.module.scss';
 import { AccountPreview } from '../../../../components/AccountPreview';
+import { ModalContextKeys } from '../../../../contexts/ModalContext';
+import { useState,useContext } from 'react';
+import { followUser,unfollowUser } from '../../../../services/userServices';
+import Cookies from 'js-cookie';
+import store from '../../../../redux/store';
+
 
 const cx = classNames.bind(styles);
 function AcountItem({ data }) {
+
+    const [following,setFollowing] = useState(data.is_followed);
+
+    const {isShowingLogin} = useContext(ModalContextKeys)
+    const {auth} = store.getState();
+    const token = Cookies.get("tokenAuth")
+
+
+    const handleFollow = () => {
+        followUser(data.id, token);
+        setFollowing(true);
+        // setDataFollower(`follow ${data.user.id}`);
+    };
+
+    const handleUnFollow = () => {
+        unfollowUser(data.id, token);
+        setFollowing(false);
+        // setDataFollower(`unfollow ${data.user.id}`);
+
+    };
     return (
         <div>
             <Tippy
@@ -20,7 +46,15 @@ function AcountItem({ data }) {
                 render={(attrs) => (
                     <div className={cx('account-preview')} {...attrs}>
                         <Wrapper>
-                            <AccountPreview data={data} primary />
+                            {   
+                                auth ? ( following ?<AccountPreview data={data} onClick ={handleUnFollow} outline nameBtn="Đang Follow" /> 
+                                                    : <AccountPreview data={data} onClick = {handleFollow} primary nameBtn="Follow" /> 
+                                        )
+                                    : (
+                                        <AccountPreview data={data} onClick = {isShowingLogin}  primary nameBtn="Follow" />
+                                    )
+                            }
+                            
                         </Wrapper>
                     </div>
                 )}

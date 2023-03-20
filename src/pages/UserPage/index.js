@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import request from '../../utils/request';
 import { useEffect } from 'react';
 
 import {
@@ -15,15 +14,13 @@ import {
     TelegramIcon,
     FacebookIcon,
     LockIcon,
-    // LikeIcon,
 } from '../../components/Icon';
 import classNames from 'classnames/bind';
 import styles from './UserPage.module.scss';
-// import Image from '../../components/Image';
+import {getProfileUser} from "../../services/userServices"
 import Button from '../../components/Button';
 import Menu from '../../components/Popper/Menu';
 import { useState } from 'react';
-// import { Link } from 'react-router-dom';
 import ButtonBottom from '../../components/ButtonBottom/ButtonBottom';
 import VideosProfile from './VideosProfile';
 import LikedProfile from './LikedProfile';
@@ -111,15 +108,10 @@ function UserPage() {
     
 
     useEffect(() => {
-        request
-            .get(`users/@${user.nickname}`)
-            .then((res) => {
-                setData(res.data.data)
-            });
-        
-        
-        
-    
+        getProfileUser(user.nickname)
+            .then((res)=>{
+                setData(res.data)
+            })
     }, [user.nickname]);
     
     document.title = data ? (`${fullName} (@${data.nickname}) | TikTok`) : "Tiktok - Make your day"

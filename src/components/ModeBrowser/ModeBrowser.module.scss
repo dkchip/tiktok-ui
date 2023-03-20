@@ -1,0 +1,271 @@
+.container {
+    position: fixed;
+    z-index: 9999999;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    overscroll-behavior: contain;
+}
+
+.video-container {
+    flex: 1 0 600px;
+    max-width: 100%;
+    border-right: 1px solid red;
+}
+
+.content-container {
+    flex: 0 0 544px;
+    width: 544px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    padding: 32px 32px 10px 32px;
+    border-bottom: 1px solid var(--black);
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.06);
+}
+
+.info-user {
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.name-container {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.nick-name,
+.full-name {
+    line-height: 18px;
+}
+
+.btn-follow{
+    max-width: 120px;
+}
+
+.description {
+    margin-top: 20px;
+}
+
+.link-music {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    & i {
+        display: flex;
+    }
+
+    & .name-music {
+        margin-left: 4px;
+    }
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.like {
+    display: flex;
+    align-items: center;
+
+    & i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: rgba(22, 24, 35, 0.06);
+    }
+
+    & .like-count {
+        margin-left: 4px;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.interact {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 26px;
+}
+
+.actions {
+    display: flex;
+    height: 100%;
+}
+
+.comment-icon {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+
+    & i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: rgba(22, 24, 35, 0.06);
+    }
+
+    & .comment-count {
+        margin-left: 4px;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.coppy-link {
+    margin-top: 20px;
+}
+
+.share-icon {
+    margin: 0 2px;
+}
+
+.coppy-link {
+    display: flex;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.link-text {
+    flex: 1 1 auto;
+    font-size: 1.4rem;
+    padding: 4px 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
+.coppy-btn {
+    font-weight: 600;
+    padding: 4px 4px;
+    font-size: 1.2rem;
+    flex: 0 0 auto;
+    background-color: transparent;
+    &:hover {
+        background-color: var(--white);
+    }
+}
+
+//body
+
+.comment {
+    width: 100%;
+    padding: 24px 32px;
+    box-sizing: border-box;
+    background-color: rgb(248, 248, 248);
+    border-top: 1px solid rgba(22, 24, 35, 0.2);
+    border-bottom: 1px solid rgba(22, 24, 35, 0.2);
+    overflow: hidden auto;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    overscroll-behavior: contain;
+}
+
+.comment-item {
+    display: flex;
+    margin-top: 10px;
+}
+
+.comment-content{
+    margin-left: 10px;
+    flex: 1;
+}
+
+.comment-reply{
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.like-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+
+.comment-inpput-container {
+    margin: 0px 30px;
+    padding: 21px 0px;
+    flex: 0 0 auto;
+    display: flex;
+}
+
+.comment-input-wrapper {
+    flex: 1;
+    background-color: rgb(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.comment-login {
+    color: var(--primary);
+    width: 100%;
+    padding: 10px 4px;
+    text-align: left;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.comment-input{
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    & input{
+        flex: 1;
+        font-size: 1.8rem;
+        padding: 10px 6px;
+    }
+
+    &:focus-within{
+        border: 1px solid #ccc;
+    }
+
+
+    & .emoji-icon{
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 10px;
+        font-size: 2rem;
+    }
+}
+
+.submit-comment{
+    margin: 0 8px;
+    font-size: 1.6rem;
+    color: #ccc;
+}
+

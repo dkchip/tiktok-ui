@@ -1,98 +1,68 @@
 import classNames from 'classnames/bind';
 import styles from './TypeModal.module.scss';
-import Button from '../../Button';
-
-import {
-    QrIcon,
-    UserIcon,
-    FacebookIcon,
-    GoogleIcon,
-    TwitterIcon,
-    LineIcon,
-    KakaoTalkIcon,
-    AppleIcon,
-    InstargramIcon,
-} from '../../Icon';
+import { EyeHideIcon,EyeShowIcon } from '../../Icon';
+import { useState } from 'react';
+import store from '../../../redux/store';
+import { loginUser } from '../../../services/userServices';
+import { setUser } from '../../../redux/actions';
+import {useNavigate} from "react-router-dom"
+import Cookies from 'js-cookie';
 
 const cx = classNames.bind(styles);
+function Login() {
+    const history = useNavigate();
+    const [show,setShow] = useState(false);
+    const [email,setEmail] = useState('');
+    const [password,setPassword] = useState("");
 
-function Login({onclick}) {
-    const MENU_LOGIN = [
-        {
-            title: 'Sử dụng mã QR',
-            icon: <QrIcon />,
-            name : "qrcode",
-            click : onclick
-        },
-        {
-            title: 'Số điện thoại / Email / Tiktok Id',
-            icon: <UserIcon />,
-            disabled :"disabled"
-        },
-        {
-            title: 'Tiếp tục với Facebook',
-            icon: <FacebookIcon />,
-            disabled :"disabled"
+    const onChangeType =  ()=>{
+        setShow(!show);
+    }
 
-        },
-        {
-            title: 'Tiếp tục với Google',
-            icon: <GoogleIcon />,
-            disabled :"disabled"
+    const goToHomePage = ()=>{
+        history("/");
+    }
 
-        },
-        {
-            title: 'Tiếp tục với Twitter',
-            icon: <TwitterIcon />,
-            disabled :"disabled"
+    const handleLogin = (e)=>{
+        e.preventDefault();
+        loginUser(email,password)
+        .then((res)=>{
+            store.dispatch(setUser(res.data));
+            Cookies.remove("tokenAuth")
+            Cookies.set("tokenAuth",res.meta.token);
+            window.location.reload();
+            goToHomePage();
+        })
+        .catch((e)=>{
+            
+        })
+    }
 
-        },
-        {
-            title: 'Tiếp tục với Line',
-            icon: <LineIcon />,
-            disabled :"disabled"
 
-        },
-        {
-            title: 'Tiếp tục với KakaoTalk',
-            icon: <KakaoTalkIcon />,
-            disabled :"disabled"
-
-        },
-        {
-            title: 'Tiếp tục với Apple',
-            icon: <AppleIcon />,
-            disabled :"disabled"
-
-        },
-        {
-            title: 'Tiếp tục với Instargram',
-            icon: <InstargramIcon />,
-            disabled :"disabled"
-
-        },
-    ];
     return (
         <div className={cx('wrapper')}>
-            <h1 className={cx('title')}>Đăng nhập vào Tiktok</h1>
-            <div className={cx('content')}>
-                <div className={cx('list')}>
-                    {MENU_LOGIN.map((item, index) => {
-                        return (
-                            <div key={index} className={cx('btn')}>
-                                <Button disabled={item.disabled} 
-                                        onclick={item.click ? ()=>{item.click(item.name)} : null} 
-                                        to={item.path} 
-                                        outline 
-                                        iconLeft={item.icon}
-                                >
-                                    {item.title}
-                                </Button>
-                            </div>
-                        );
-                    })}
+            <form className={cx('form')}>
+                <div className={cx('container')}>
+                    <div className={cx('title')}>
+                        <span>Email</span>
+                    </div>
+                    <div className={cx('content')}>
+                        <div className={cx('account')}>
+                            <input type="text" placeholder="Nhập email"  onChange={(e)=>{setEmail(e.target.value)}}/>
+                        </div>
+                        <div className={cx('password')}>
+                            <input type={!show ? "password" : "text"} placeholder="Mật khẩu" onChange={(e)=>{setPassword(e.target.value)}} />
+                            <i className={cx('showhide')} onClick = {onChangeType}>
+                                {!show ? <EyeHideIcon /> : <EyeShowIcon/>}
+                            </i>
+                        </div>
+                    </div>
+                    <a className={cx('link')}>Quên mật khẩu?</a>
                 </div>
-            </div>
+                <div className={cx('submit')}>
+                    <button className={cx('btn-submit')} onClick={(e)=>{handleLogin(e)}}>Đăng nhập</button>
+                </div>
+            </form>
         </div>
     );
 }

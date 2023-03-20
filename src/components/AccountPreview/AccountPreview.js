@@ -5,7 +5,7 @@ import Button from '../Button';
 import { Link } from 'react-router-dom';
 import { Ticker } from '../Icon';
 const cx = classNames.bind(styles);
-function AccountPreview({ data, outline = false, primary = false, outlinePrimary = false }) {
+function AccountPreview({ data, outline = false, primary = false, outlinePrimary = false ,nameBtn,onClick}) {
     const props = {
         outline,
         primary,
@@ -18,7 +18,9 @@ function AccountPreview({ data, outline = false, primary = false, outlinePrimary
                 <Link to={`/@${data.nickname}`}>
                     <Image className={cx('avatar')} alt="" src={data.avatar} />
                 </Link>
-                <Button {...props}>Follow</Button>
+                <div className={cx("btn")}>
+                    <Button {...props} onClick = {onClick}>{nameBtn}</Button>
+                </div>
             </div>
 
             <Link className={cx('link')} to={`@${data.nickname}`}>

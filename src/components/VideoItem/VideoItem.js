@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useElementOnScreen } from '../../hooks';
 import Tippy from '@tippyjs/react/headless';
-
+import { ModalContextKeys } from '../../contexts/ModalContext';
 import {
     LinkIcon,
     ShareIcon,
@@ -16,7 +16,7 @@ import {
     FacebookIcon,
     MusicIcon,
     LikeIcon,
-    //  LikeIconActive,
+    LikeIconActive,
     CommentIcon,
     PlayIcon,
     PauseIcon,
@@ -30,8 +30,10 @@ import AccountPreview from '../AccountPreview/AccountPreview';
 import Image from '../Image';
 import styles from './VideoItem.module.scss';
 import classNames from 'classnames/bind';
-import Modal from '../Modal/Modal';
-import useModal from '../../hooks/useModal';
+import store from '../../redux/store';
+import { likeVideos, unLikeVideos } from '../../services/videoService';
+import Cookies from 'js-cookie';
+import { followUser, unfollowUser } from '../../services/userServices';
 
 const cx = classNames.bind(styles);
 
@@ -80,19 +82,42 @@ const MENU_SHARE = {
     ],
 };
 
-function VideoItem({ data, volume, setVolume }) {
+function VideoItem({
+    data,
+    volume,
+    setVolume,
+    index,
+    dataAll,
+    interaction,
+    setInteraction,
+    dataFollower,
+    setDataFollower,
+}) {
 
+    const { auth } = store.getState();
     const [playing, setPlaying] = useState(false);
+    const [liked, setLiked] = useState(data.is_liked);
+    const [following, setFollowing] = useState(data.user.is_followed);
+    const [likeCounts, setLikeCount] = useState(data.likes_count);
+    // const [dataComments, setDataComments] = useState([]);
     const videoRef = useRef(null);
+    const { isShowingLogin, isShowingModalVideo, setDataVideo, setIndexVideo } = useContext(ModalContextKeys);
 
     const options = {
         root: null,
         rootMargin: '0px',
         threshold: 0.6,
     };
+
     const isVisibile = useElementOnScreen(options, videoRef);
-    // const playPromise = videoRef.current.play();
-    
+
+    const handleClick = () => {
+        isShowingModalVideo();
+        setIndexVideo(index);
+        setDataVideo(dataAll[index]);
+        setInteraction(false);
+    };
+
     const onVideoClick = () => {
         if (playing) {
             videoRef.current.pause();
@@ -103,24 +128,19 @@ function VideoItem({ data, volume, setVolume }) {
         }
     };
 
-    // if (playPromise !== undefined) {
-    //     playPromise.then(() => {});
-    // }
     const playPromise = videoRef.current;
 
-    async function playVideo(){
+    async function playVideo() {
+        // set curentTime video = 0;
         videoRef.current.currentTime = 0;
-               await videoRef.current.play();
-                setPlaying(true);
+        await videoRef.current.play();
+        setPlaying(true);
     }
 
     useEffect(() => {
-        if (isVisibile) {
-    
+        if (isVisibile && interaction) {
             if (!playing && playPromise !== undefined) {
-                // set curentTime video = 0;
                 playVideo();
-                
             }
         } else {
             if (playing) {
@@ -131,26 +151,71 @@ function VideoItem({ data, volume, setVolume }) {
         // eslint-disable-next-line
     }, [isVisibile]);
 
-    useEffect(()=>{
+    useEffect(() => {
         videoRef.current.volume = volume;
-    },[volume])
-    
+    }, [volume]);
+
+    useEffect(()=>{
+        if(dataFollower === `follow ${data.user.id}`){
+            setFollowing(true);
+        }else if(dataFollower === `unfollow ${data.user.id}`){
+            setFollowing(false);
+        }
+        // eslint-disable-next-line
+    },[dataFollower])
+
     const handleVolume = () => {
-        if (volume === 0) {
-            setVolume(0.5);
+        if (volume === '0') {
+            setVolume('0.5');
         } else {
-            setVolume(0);
+            setVolume('0');
         }
     };
-    useEffect(()=>{
-        
-    })
 
-    const { isShowing, toggle } = useModal();
-   
+    // handle request
+    const token = Cookies.get('tokenAuth');
+    const requestLikeVideo = () => {
+        likeVideos(data.uuid, token);
+    };
+
+    const requestUnLikeVideo = () => {
+        unLikeVideos(data.uuid, token);
+    };
+
+    const handleLikeVideo = () => {
+        if (auth) {
+            if (liked) {
+                setLiked(!liked);
+                setLikeCount(likeCounts - 1);
+                requestUnLikeVideo();
+            } else {
+                setLiked(!liked);
+                setLikeCount(likeCounts + 1);
+                requestLikeVideo();
+            }
+        } else {
+            isShowingLogin();
+        }
+    };
+
+    
+    const handleFollow = () => {
+        followUser(data.user.id, token);
+        setFollowing(true);
+        setDataFollower(`follow ${data.user.id}`);
+    };
+
+    const handleUnFollow = () => {
+        unfollowUser(data.user.id, token);
+        setFollowing(false);
+        setDataFollower(`unfollow ${data.user.id}`);
+
+    };
+
+
 
     return (
-        <div className={cx('wrapper')}>
+        <div id={index} className={cx('wrapper')}>
             <div className={cx('avatar-wrap')}>
                 <Tippy
                     placement="bottom-start"
@@ -159,7 +224,33 @@ function VideoItem({ data, volume, setVolume }) {
                     render={(attrs) => (
                         <div className={cx('user-wrap')} {...attrs}>
                             <Wrapper>
-                                <AccountPreview data={data.user} outlinePrimary />
+                                {
+                                    auth ? (
+                                                following ? (
+                                                    <AccountPreview
+                                                        data={data.user}
+                                                        onClick={handleUnFollow}
+                                                        outline
+                                                        nameBtn="Đang Follow"
+                                                    />
+                                                ) : (
+                                                    <AccountPreview
+                                                        data={data.user}
+                                                        onClick={handleFollow}
+                                                        outlinePrimary
+                                                        nameBtn="Follow"
+                                                    />
+                                                )
+                                            )
+                                           :(
+                                            <AccountPreview
+                                                data={data.user}
+                                                onClick={isShowingLogin}
+                                                outlinePrimary
+                                                nameBtn="Follow"
+                                            />
+                                           )
+                                }
                             </Wrapper>
                         </div>
                     )}
@@ -186,12 +277,32 @@ function VideoItem({ data, volume, setVolume }) {
                             <h4 className={cx('music-name')}>{data.music}</h4>
                         </Link>
                     </div>
-                    <div className={cx('btn')}>
-                        <Button onClick={toggle} outlinePrimary>
-                            Follow
-                        </Button>
-                        <Modal isShowing={isShowing} hide={toggle}></Modal>
-                    </div>
+                    {auth ? (
+                        !following ? (
+                            <div className={cx('btn')}>
+                                <Button outlinePrimary onClick={handleFollow}>
+                                    Follow
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className={cx('btn')}>
+                                <Button outline onClick={handleUnFollow}>
+                                    Đang follow
+                                </Button>
+                            </div>
+                        )
+                    ) : (
+                        <div className={cx('btn')}>
+                            <Button
+                                outlinePrimary
+                                onclick={() => {
+                                    isShowingLogin();
+                                }}
+                            >
+                                Follow
+                            </Button>
+                        </div>
+                    )}
                 </div>
                 <div className={cx('body')}>
                     <div
@@ -206,24 +317,33 @@ function VideoItem({ data, volume, setVolume }) {
                     >
                         <img
                             className={cx('image', `${playing === false ? 'z-index-image' : ''}`)}
+                            onClick={handleClick}
                             src={data.thumb_url}
                             alt=""
                         />
                         <video
                             muted={false}
                             ref={videoRef}
-                            onClick={onVideoClick}
+                            onClick={() => {
+                                onVideoClick();
+                                handleClick();
+                            }}
                             loop
                             playsInline={true}
                             poster={data.thumb_url}
-                            
                         >
                             <source src={data.file_url} type="video/mp4" />
                             Your browser does not support HTML video.
                         </video>
                         <div className={cx('controls')}>
                             <div className={cx('btn-wrap')}>
-                                <button className={cx('btn-play', `${playing ? 'hide' : ''}`)} onClick={onVideoClick}>
+                                <button
+                                    className={cx('btn-play', `${playing ? 'hide' : ''}`)}
+                                    onClick={() => {
+                                        onVideoClick();
+                                        setInteraction(true);
+                                    }}
+                                >
                                     <PlayIcon />
                                 </button>
                                 <button className={cx('btn-pause', `${playing ? '' : 'hide'}`)} onClick={onVideoClick}>
@@ -234,10 +354,9 @@ function VideoItem({ data, volume, setVolume }) {
                                 <div className={cx('volume-container')}>
                                     <input
                                         onChange={(e) => {
-                                            setVolume(e.target.value);
+                                            setVolume(`${e.target.value}`);
 
                                             videoRef.current.volume = volume;
-        
                                         }}
                                         value={volume}
                                         type="range"
@@ -246,7 +365,7 @@ function VideoItem({ data, volume, setVolume }) {
                                         step="0.1"
                                     ></input>
                                 </div>
-                                {volume === 0 ? (
+                                {volume === '0' ? (
                                     <button onClick={handleVolume} className={cx('volume-off')}>
                                         <VolumeOffIcon />
                                     </button>
@@ -261,13 +380,18 @@ function VideoItem({ data, volume, setVolume }) {
 
                     <div className={cx('action-item')}>
                         <button>
-                            <i className={cx('icon')}>
-                                <LikeIcon />
+                            <i className={cx('icon')} onClick={handleLikeVideo}>
+                                {auth ? liked ? <LikeIconActive /> : <LikeIcon /> : <LikeIcon />}
                             </i>
-                            <p className={cx('like-count')}>{data.likes_count}</p>
+                            <p className={cx('like-count')}>{likeCounts}</p>
                         </button>
                         <button>
-                            <i className={cx('icon')}>
+                            <i
+                                className={cx('icon')}
+                                onClick={() => {
+                                    handleClick();
+                                }}
+                            >
                                 <CommentIcon />
                             </i>
                             <p className={'comment-count'}>{data.comments_count}</p>

@@ -230,9 +230,9 @@ export const MusicIcon = () => {
     );
 };
 
-export const LikeIcon = () => {
+export const LikeIcon = ({ width = '24', height = '24' }) => {
     return (
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="24" height="24">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width={width} height={height}>
             <g>
                 <path
                     d="M7.5 2.25C10.5 2.25 12 4.25 12 4.25C12 4.25 13.5 2.25 16.5 2.25C20 2.25 22.5 4.99999 22.5 8.5C22.5 12.5 19.2311 16.0657 16.25 18.75C14.4095 20.4072 13 21.5 12 21.5C11 21.5 9.55051 20.3989 7.75 18.75C4.81949 16.0662 1.5 12.5 1.5 8.5C1.5 4.99999 4 2.25 7.5 2.25Z"
@@ -248,29 +248,35 @@ export const LikeIcon = () => {
     );
 };
 
-export const LikeIconActive = () => {
+export const LikeIconActive = ({width = "25",height = "25"}) => {
     return (
-        <svg width="24" data-e2e="" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width={width} data-e2e="" height={height} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g filter="url(#LikeRedShadowColor_filter0_d)">
                 <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M15 4.5C21 4.5 24 8.5 24 8.5C24 8.5 27 4.5 33 4.5C40 4.5 45 9.99998 45 17C45 25 38.4622 32.1314 32.5 37.5C28.8191 40.8144 26 43 24 43C22 43 19.101 40.7978 15.5 37.5C9.63898 32.1325 3 25 3 17C3 9.99998 8 4.5 15 4.5Z"
                     fill="#FE2C55"
                 ></path>
             </g>
             <path
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M4.80371 24.3995C7.17815 29.3932 11.5185 33.8538 15.4999 37.4999C19.1009 40.7978 21.9999 42.9999 23.9999 42.9999C25.9999 42.9999 28.819 40.8144 32.4999 37.4999C38.4621 32.1314 44.9999 24.9999 44.9999 16.9999C44.9999 16.8252 44.9968 16.6513 44.9906 16.4785C41.1344 27.3238 27.3575 37 23.5001 37C20.6255 37 11.2219 31.6262 4.80371 24.3995Z"
                 fill="black"
+                fillOpacity="0.03"
             ></path>
             <defs>
                 <filter
+                    id="LikeRedShadowColor_filter0_d"
                     x="0.6"
                     y="3.3"
                     width="46.8"
                     height="43.3"
                     filterUnits="userSpaceOnUse"
-                    color-interpolation-filters="sRGB"
+                    colorInterpolationFilters="sRGB"
                 >
-                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                    <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
                     <feColorMatrix
                         in="SourceAlpha"
                         type="matrix"
@@ -287,9 +293,84 @@ export const LikeIconActive = () => {
     );
 };
 
-export const CommentIcon = () => {
+export const LikeCommentIcon = ({ width = '20' }) => {
     return (
-        <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            data-e2e=""
+            height="20"
+            viewBox="0 0 48 48"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M24 9.01703C19.0025 3.74266 11.4674 3.736 6.67302 8.56049C1.77566 13.4886 1.77566 21.4735 6.67302 26.4016L22.5814 42.4098C22.9568 42.7876 23.4674 43 24 43C24.5326 43 25.0432 42.7876 25.4186 42.4098L41.327 26.4016C46.2243 21.4735 46.2243 13.4886 41.327 8.56049C36.5326 3.736 28.9975 3.74266 24 9.01703ZM21.4938 12.2118C17.9849 8.07195 12.7825 8.08727 9.51028 11.3801C6.16324 14.7481 6.16324 20.214 9.51028 23.582L24 38.1627L38.4897 23.582C41.8368 20.214 41.8368 14.7481 38.4897 11.3801C35.2175 8.08727 30.0151 8.07195 26.5062 12.2118L26.455 12.2722L25.4186 13.3151C25.0432 13.6929 24.5326 13.9053 24 13.9053C23.4674 13.9053 22.9568 13.6929 22.5814 13.3151L21.545 12.2722L21.4938 12.2118Z"
+            ></path>
+        </svg>
+    );
+};
+
+export const LikeCommentActiveIcon = ({ width = '20' }) => {
+    return (
+        <svg
+            width={width}
+            data-e2e=""
+            height="20"
+            viewBox="0 0 24 24"
+            fill="rgba(254, 44, 85, 1)"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <g clipPath="url(#HeartFill_clip0)">
+                <g filter="url(#HeartFill_filter0_d)">
+                    <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M7.5 2.25C10.5 2.25 12 4.25 12 4.25C12 4.25 13.5 2.25 16.5 2.25C20 2.25 22.5 4.99999 22.5 8.5C22.5 12.5 19.2311 16.0657 16.25 18.75C14.4095 20.4072 13 21.5 12 21.5C11 21.5 9.55051 20.3989 7.75 18.75C4.81949 16.0662 1.5 12.5 1.5 8.5C1.5 4.99999 4 2.25 7.5 2.25Z"
+                    ></path>
+                </g>
+                <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M2.40179 12.1998C3.58902 14.6966 5.7592 16.9269 7.74989 18.75C9.5504 20.3989 10.9999 21.5 11.9999 21.5C12.9999 21.5 14.4094 20.4072 16.2499 18.75C19.231 16.0657 22.4999 12.5 22.4999 8.49997C22.4999 8.41258 22.4983 8.32566 22.4952 8.23923C20.5671 13.6619 13.6787 18.5 11.75 18.5C10.3127 18.5 5.61087 15.8131 2.40179 12.1998Z"
+                    fillOpacity="0.03"
+                ></path>
+            </g>
+            <defs>
+                <filter
+                    id="HeartFill_filter0_d"
+                    x="-0.9"
+                    y="1.05"
+                    width="25.8"
+                    height="24.05"
+                    filterUnits="userSpaceOnUse"
+                    color-interpolation-filters="sRGB"
+                >
+                    <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
+                    <feColorMatrix
+                        in="SourceAlpha"
+                        type="matrix"
+                        values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                        result="hardAlpha"
+                    ></feColorMatrix>
+                    <feOffset dy="1.2"></feOffset>
+                    <feGaussianBlur stdDeviation="1.2"></feGaussianBlur>
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"></feColorMatrix>
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
+                </filter>
+                <clipPath id="HeartFill_clip0">
+                    <rect width="24" height="24" fill="white"></rect>
+                </clipPath>
+            </defs>
+        </svg>
+    );
+};
+
+export const CommentIcon = ({ width = '24', height = '24' }) => {
+    return (
+        <svg width={width} height={height} viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M16.0393 14.7137C17.75 13 18.75 11.215 18.75 9.13662C18.75 4.91897 14.8887 1.49997 10.125 1.49997C5.36129 1.49997 1.5 4.91897 1.5 9.13675C1.5 13.3545 5.48622 16.25 10.25 16.25V17.6487C10.25 18.0919 10.7095 18.3771 11.0992 18.1659C12.3166 17.5062 14.5725 16.183 16.0393 14.7137ZM5.93527 8.10679C6.61608 8.10679 7.16797 8.65471 7.16797 9.32962C7.16797 10.0059 6.61608 10.5538 5.93527 10.5538C5.2556 10.5538 4.70368 10.0059 4.70368 9.32962C4.70368 8.65471 5.2556 8.10679 5.93527 8.10679ZM11.3572 9.32962C11.3572 8.65471 10.8055 8.10679 10.125 8.10679C9.44459 8.10679 8.89289 8.65471 8.89289 9.32962C8.89292 10.0059 9.44462 10.5538 10.125 10.5538C10.8055 10.5538 11.3572 10.0059 11.3572 9.32962ZM14.3146 8.10679C14.9953 8.10679 15.5464 8.65471 15.5464 9.32962C15.5464 10.0059 14.9953 10.5538 14.3146 10.5538C13.6339 10.5538 13.082 10.0059 13.0821 9.32962C13.0821 8.65471 13.6339 8.10679 14.3146 8.10679Z"></path>
             <path
                 opacity="0.1"
@@ -310,9 +391,9 @@ export const CommentIcon = () => {
     );
 };
 
-export const ShareIcon = () => {
+export const ShareIcon = ({ width = '24', height = '24' }) => {
     return (
-        <svg width="24" height="24" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <svg width={width} height={height} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M10.9376 3.17495C10.9376 2.58272 11.6469 2.27873 12.0758 2.68715L18.6021 8.90241C19.1764 9.44937 19.1564 10.3717 18.5588 10.8931L12.0541 16.5689C11.6184 16.9491 10.9376 16.6397 10.9376 16.0614V13.4894C10.9376 13.4894 3.95344 12.2312 1.7131 16.3434C1.50423 16.7268 0.690072 16.8609 0.855563 14.948C1.54761 11.4273 2.96196 5.93084 10.9376 5.93084V3.17495Z"
                 fill="currentColor"
@@ -344,6 +425,14 @@ export const ShareIcon = () => {
 export const PlayIcon = () => {
     return (
         <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff">
+            <path d="M12 8.77702C12 6.43812 14.5577 4.99881 16.5569 6.21266L41.6301 21.4356C43.5542 22.6038 43.5542 25.3962 41.6301 26.5644L16.5569 41.7873C14.5577 43.0012 12 41.5619 12 39.223V8.77702Z"></path>
+        </svg>
+    );
+};
+
+export const PlayLargeIcon = () => {
+    return (
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#fff">
             <path d="M12 8.77702C12 6.43812 14.5577 4.99881 16.5569 6.21266L41.6301 21.4356C43.5542 22.6038 43.5542 25.3962 41.6301 26.5644L16.5569 41.7873C14.5577 43.0012 12 41.5619 12 39.223V8.77702Z"></path>
         </svg>
     );
@@ -416,9 +505,16 @@ export const MenuIcon = () => {
     );
 };
 
-export const DipIcon = () => {
+export const DipIcon = ({ width = '26', height = '26' }) => {
     return (
-        <svg width="26" data-e2e="" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            data-e2e=""
+            height={height}
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z"
                 fill="#161823"
@@ -431,9 +527,16 @@ export const DipIcon = () => {
     );
 };
 
-export const FacebookIcon = () => {
+export const FacebookIcon = ({ width = '26', height = '26' }) => {
     return (
-        <svg width="26" data-e2e="" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            data-e2e=""
+            height={height}
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M24 47C36.7025 47 47 36.7025 47 24C47 11.2975 36.7025 1 24 1C11.2975 1 1 11.2975 1 24C1 36.7025 11.2975 47 24 47Z"
                 fill="white"
@@ -446,9 +549,16 @@ export const FacebookIcon = () => {
     );
 };
 
-export const WhatsAppIcon = () => {
+export const WhatsAppIcon = ({ width = '26', height = '26' }) => {
     return (
-        <svg width="26" data-e2e="" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            data-e2e=""
+            height={height}
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M24 47C36.7025 47 47 36.7025 47 24C47 11.2975 36.7025 1 24 1C11.2975 1 1 11.2975 1 24C1 36.7025 11.2975 47 24 47Z"
                 fill="#25D366"
@@ -461,9 +571,16 @@ export const WhatsAppIcon = () => {
     );
 };
 
-export const TwitterIcon = () => {
+export const TwitterIcon = ({ width = '26', height = '26' }) => {
     return (
-        <svg width="26" data-e2e="" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            data-e2e=""
+            height={height}
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M24.0002 47.001C36.7028 47.001 47.0002 36.7035 47.0002 24.001C47.0002 11.2984 36.7028 1.00098 24.0002 1.00098C11.2977 1.00098 1.00024 11.2984 1.00024 24.001C1.00024 36.7035 11.2977 47.001 24.0002 47.001Z"
                 fill="#1DA1F2"
@@ -476,9 +593,16 @@ export const TwitterIcon = () => {
     );
 };
 
-export const LinkedIcon = () => {
+export const LinkedIcon = ({ width = '26', height = '26' }) => {
     return (
-        <svg width="26" data-e2e="" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            data-e2e=""
+            height={height}
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <circle cx="24" cy="24" r="24" fill="#0A66C2"></circle>
             <path
                 d="M25.2775 21.8588C25.5235 21.4456 25.8234 21.067 26.1692 20.7329C26.6685 20.2507 27.2585 19.8724 27.9051 19.6199C28.5518 19.3675 29.2421 19.246 29.936 19.2625C31.0487 19.2625 32.1351 19.3862 33.1478 19.8886C34.6419 20.6251 35.3363 21.9324 35.6888 23.4765C35.9239 24.6175 36.0298 25.7813 36.0044 26.946C36.0044 29.7685 36.0044 32.5909 36.0044 35.416C36.0044 35.6633 35.9387 35.7317 35.6914 35.729C34.242 35.729 32.7979 35.7159 31.3433 35.729C31.0803 35.729 31.0119 35.6659 31.0145 35.4029C31.025 32.7251 31.025 30.0482 31.0145 27.3722C31.0217 26.806 30.9679 26.2407 30.854 25.686C30.5252 24.1867 29.5835 23.5002 28.0553 23.6527C26.527 23.8053 25.6879 24.6891 25.4827 26.3384C25.4319 26.7652 25.4073 27.1948 25.409 27.6247C25.409 30.2183 25.409 32.8093 25.409 35.4029C25.409 35.6659 25.3354 35.7317 25.0776 35.729C23.6177 35.7159 22.1578 35.729 20.6979 35.729C20.4586 35.729 20.4033 35.6607 20.4033 35.4292C20.4033 30.2735 20.4033 25.1196 20.4033 19.9675C20.4033 19.7044 20.4849 19.6571 20.7242 19.6571C22.1105 19.6571 23.4967 19.6702 24.883 19.6571C25.146 19.6571 25.1986 19.7386 25.1933 19.978C25.1802 20.5935 25.1933 21.209 25.1933 21.8193L25.2775 21.8588Z"
@@ -496,9 +620,16 @@ export const LinkedIcon = () => {
     );
 };
 
-export const RedditIcon = () => {
+export const RedditIcon = ({ width = '26', height = '26' }) => {
     return (
-        <svg width="26" data-e2e="" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            width={width}
+            data-e2e=""
+            height={height}
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M12 24C5.3736 24 0 18.6264 0 12C0 5.3736 5.3736 0 12 0C18.6264 0 24 5.3736 24 12C24 18.6264 18.6264 24 12 24Z"
                 fill="#FF4500"
@@ -581,6 +712,14 @@ export const CloseIcon = () => {
                 clipRule="evenodd"
                 d="M21.1718 23.9999L10.2931 13.1212C9.90261 12.7307 9.90261 12.0975 10.2931 11.707L11.7074 10.2928C12.0979 9.90228 12.731 9.90228 13.1216 10.2928L24.0002 21.1715L34.8789 10.2928C35.2694 9.90228 35.9026 9.90228 36.2931 10.2928L37.7073 11.707C38.0979 12.0975 38.0979 12.7307 37.7073 13.1212L26.8287 23.9999L37.7073 34.8786C38.0979 35.2691 38.0979 35.9023 37.7073 36.2928L36.2931 37.707C35.9026 38.0975 35.2694 38.0975 34.8789 37.707L24.0002 26.8283L13.1216 37.707C12.731 38.0975 12.0979 38.0975 11.7074 37.707L10.2931 36.2928C9.90261 35.9023 9.90261 35.2691 10.2931 34.8786L21.1718 23.9999Z"
             ></path>
+        </svg>
+    );
+};
+
+export const CloseWhiteIcon = () => {
+    return (
+        <svg width="18" data-e2e="" height="18" viewBox="0 0 9 10" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.35299 0.792837L4.49961 3.93944L7.64545 0.792566C7.8407 0.597249 8.15733 0.597223 8.35262 0.792508L8.70669 1.14658C8.90195 1.34184 8.90195 1.65842 8.70669 1.85368L5.56027 5.0001L8.70672 8.14655C8.90198 8.34181 8.90198 8.65839 8.70672 8.85366L8.35316 9.20721C8.1579 9.40247 7.84132 9.40247 7.64606 9.20721L4.49961 6.06076L1.35319 9.20719C1.15793 9.40245 0.841345 9.40245 0.646083 9.20719L0.292629 8.85373C0.0973708 8.65847 0.0973653 8.3419 0.292617 8.14664L3.43895 5.0001L0.292432 1.85357C0.0972034 1.65834 0.0971656 1.34182 0.292347 1.14655L0.645801 0.792924C0.841049 0.597582 1.1577 0.597543 1.35299 0.792837Z"></path>
         </svg>
     );
 };
@@ -783,6 +922,30 @@ export const InstargramIcon = () => {
     );
 };
 
+export const ArrowPrevIcon = () => {
+    return (
+        <svg width="26" data-e2e="" height="26" viewBox="0 0 48 48" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M34.4142 22.5858L18.1213 6.29289C17.7308 5.90237 17.0976 5.90237 16.7071 6.29289L15.2929 7.70711C14.9024 8.09763 14.9024 8.7308 15.2929 9.12132L30.1716 24L15.2929 38.8787C14.9024 39.2692 14.9024 39.9024 15.2929 40.2929L16.7071 41.7071C17.0976 42.0976 17.7308 42.0976 18.1213 41.7071L34.4142 25.4142C35.1953 24.6332 35.1953 23.3668 34.4142 22.5858Z"
+            ></path>
+        </svg>
+    );
+};
+
+export const ArrowNextIcon = () => {
+    return (
+        <svg width="26" data-e2e="" height="26" viewBox="0 0 48 48" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M34.4142 22.5858L18.1213 6.29289C17.7308 5.90237 17.0976 5.90237 16.7071 6.29289L15.2929 7.70711C14.9024 8.09763 14.9024 8.7308 15.2929 9.12132L30.1716 24L15.2929 38.8787C14.9024 39.2692 14.9024 39.9024 15.2929 40.2929L16.7071 41.7071C17.0976 42.0976 17.7308 42.0976 18.1213 41.7071L34.4142 25.4142C35.1953 24.6332 35.1953 23.3668 34.4142 22.5858Z"
+            ></path>
+        </svg>
+    );
+};
+
 export const ArrowDownIcon = () => {
     return (
         <svg
@@ -797,6 +960,25 @@ export const ArrowDownIcon = () => {
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M22.5858 32.4142L8.29289 18.1213C7.90237 17.7308 7.90237 17.0976 8.29289 16.7071L9.70711 15.2929C10.0976 14.9024 10.7308 14.9024 11.1213 15.2929L24 28.1716L36.8787 15.2929C37.2692 14.9024 37.9024 14.9024 38.2929 15.2929L39.7071 16.7071C40.0976 17.0976 40.0976 17.7308 39.7071 18.1213L25.4142 32.4142C24.6332 33.1953 23.3668 33.1953 22.5858 32.4142Z"
+            ></path>
+        </svg>
+    );
+};
+
+export const ArrowLeftIcon = () => {
+    return (
+        <svg
+            width="1em"
+            data-e2e=""
+            height="1em"
+            viewBox="0 0 48 48"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M4.58579 22.5858L20.8787 6.29289C21.2692 5.90237 21.9024 5.90237 22.2929 6.29289L23.7071 7.70711C24.0976 8.09763 24.0976 8.7308 23.7071 9.12132L8.82843 24L23.7071 38.8787C24.0976 39.2692 24.0976 39.9024 23.7071 40.2929L22.2929 41.7071C21.9024 42.0976 21.2692 42.0976 20.8787 41.7071L4.58579 25.4142C3.80474 24.6332 3.80474 23.3668 4.58579 22.5858Z"
             ></path>
         </svg>
     );
@@ -852,7 +1034,7 @@ export const ScanIcon = () => {
     );
 };
 
-export const ArrowLeftIcon = () => {
+export const EmojiIcon = () => {
     return (
         <svg
             width="1em"
@@ -865,8 +1047,60 @@ export const ArrowLeftIcon = () => {
             <path
                 fillRule="evenodd"
                 clipRule="evenodd"
-                d="M4.58579 22.5858L20.8787 6.29289C21.2692 5.90237 21.9024 5.90237 22.2929 6.29289L23.7071 7.70711C24.0976 8.09763 24.0976 8.7308 23.7071 9.12132L8.82843 24L23.7071 38.8787C24.0976 39.2692 24.0976 39.9024 23.7071 40.2929L22.2929 41.7071C21.9024 42.0976 21.2692 42.0976 20.8787 41.7071L4.58579 25.4142C3.80474 24.6332 3.80474 23.3668 4.58579 22.5858Z"
+                d="M24 6C14.0589 6 6 14.0589 6 24C6 33.9411 14.0589 42 24 42C33.9411 42 42 33.9411 42 24C42 14.0589 33.9411 6 24 6ZM2 24C2 11.8497 11.8497 2 24 2C36.1503 2 46 11.8497 46 24C46 36.1503 36.1503 46 24 46C11.8497 46 2 36.1503 2 24Z"
             ></path>
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M17 23C18.6569 23 20 21.2091 20 19C20 16.7909 18.6569 15 17 15C15.3431 15 14 16.7909 14 19C14 21.2091 15.3431 23 17 23Z"
+            ></path>
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M31 23C32.6569 23 34 21.2091 34 19C34 16.7909 32.6569 15 31 15C29.3431 15 28 16.7909 28 19C28 21.2091 29.3431 23 31 23Z"
+            ></path>
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M16 28.3431C16 31.4673 19.5817 36 24 36C28.4183 36 32 31.4673 32 28.3431C32 25.219 16 25.219 16 28.3431Z"
+            ></path>
+        </svg>
+    );
+};
+
+// ICON EYEs
+
+export const EyeHideIcon = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" width="1em" height="1em">
+            <g
+                stroke="#161823"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeliterlimit="10"
+                strokeWidth="1.5"
+                opacity="0.5"
+            >
+                <path d="M2.8 7.8c2.1 1 4.5 1.6 7 1.6s4.9-.6 7-1.6M9.8 9.8v3M5.1 9.2l-1.5 2.6M14.6 9.2l1.5 2.6"></path>
+            </g>
+        </svg>
+    );
+};
+
+export const EyeShowIcon = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" width="1em" height="1em">
+            <g
+                stroke="#161823"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeMiterlimit="10"
+                strokeWidth="1.5"
+                opacity="0.5"
+            >
+                <path d="M9.8 4.8c3 0 5.3 1.7 7 5-1.7 3.3-4 5-7 5s-5.3-1.7-7-5c1.6-3.4 4-5 7-5z"></path>
+                <path d="M9.8 11.8a2 2 0 100-4 2 2 0 000 4z"></path>
+            </g>
         </svg>
     );
 };

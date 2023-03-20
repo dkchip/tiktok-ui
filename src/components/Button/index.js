@@ -15,7 +15,7 @@ function Button({
     outline = false,
     primary = false,
     primaryChange = false,
-    outlinePrimary = false,
+    outlinePrimary = false ,
     small = false,
     large = false,
     onclick,

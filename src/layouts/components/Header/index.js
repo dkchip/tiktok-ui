@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState ,useContext, useEffect} from 'react';
+import { ModalContextKeys } from '../../../contexts/ModalContext';
 import classnames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -15,8 +16,9 @@ import {
         faGear
       } from '@fortawesome/free-solid-svg-icons';
 
-import Modal from '../../../components/Modal/Modal';
-import useModal from '../../../hooks/useModal';
+import Cookies from 'js-cookie';
+import { logoutUser } from '../../../services/userServices';
+import store from '../../../redux/store';
 import routesConfig from '../../../config/routes';
 import { MessageIcon,InboxIcon } from '../../../components/Icon';
 import style from './Header.module.scss';
@@ -27,7 +29,8 @@ import Image from '../../../components/Image';
 import Search from '../Search';
 import Mail from '../../../components/Popper/Mail';
 import { Link } from 'react-router-dom';
-import {curentUser} from  '../../curentUser.js'
+
+
 
 const cx = classnames.bind(style);
 const MENU_ITEM = [
@@ -80,15 +83,27 @@ const userMenu =[
     {
         icon : <FontAwesomeIcon icon = {faSignOut} />,
         title : 'Đăng xuất',
-        path : '/logout',
+        path : '/',
+        onClick : ()=>{
+
+            logoutUser(Cookies.get("tokenAuth"))
+            .then(()=>{
+                Cookies.remove("tokenAuth")     
+                window.location.reload();
+            })
+
+                
+        },
         separate : true,
     }
 ]
 
 
+
 function Header({wider}) {
-    const {isShowing,toggle} = useModal();
+    const authData = store.getState();
     const [visible,setVisible] = useState(false)
+    const {isShowingLogin} = useContext(ModalContextKeys)
 
     const show = () =>{
         setVisible(true)
@@ -96,6 +111,7 @@ function Header({wider}) {
     const hide = () =>{
         setVisible(false)
     }
+
 
     return (
         <div className={cx('wrapper')}>
@@ -109,7 +125,7 @@ function Header({wider}) {
                 <Search />
 
                 <div className={cx('section')}>
-                    {curentUser ? (
+                    {authData.auth ? (
                            <>
                                 <Button outline   iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button> 
                                 <Tippy content='Tin nhắn' placement='bottom' >
@@ -130,18 +146,18 @@ function Header({wider}) {
                     (
                         <>
                             <Button outline  iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button>
-                            <Button onClick={toggle}  primary >Đăng nhập</Button>
+                            <Button  onClick ={isShowingLogin} primary >Đăng nhập</Button>
                             
                         </>
                     )}
-                    <Menu items = {curentUser ? userMenu: MENU_ITEM}>
+                    <Menu items = {authData.auth ? userMenu : MENU_ITEM}>
                         {
-                            curentUser ?(
+                            authData.auth ?(
 
                                 <Image 
                                 alt ='AVT'
                                 className={cx('menu-user-avt')} 
-                                src='https://p9-sign-sg.tiktokcdn.com/aweme/720x720/tos-alisg-avt-0068/e23fde803839cd77bef71e4318e59203.jpeg?x-expires=1671951600&x-signature=SFN%2B1%2BiI%2FxX4orbxeM0jZTnxAsM%3D' />
+                                src={authData.currentUser.avatar} />
                             ):(
                                 
                                 <button>
@@ -153,8 +169,7 @@ function Header({wider}) {
                                 
                     </Menu>
                 </div>
-            </div>
-            <Modal isShowing={isShowing} hide ={toggle}></Modal>   
+            </div>  
         </div>
     );
 }

@@ -1,102 +1,113 @@
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Modal.module.scss';
-import ReactDOM from 'react-dom';
-import { Link } from 'react-router-dom';
 
-import Qrcode from './TypeModal/Qrcode';
-import { CloseIcon, ArrowLeftIcon } from '../Icon';
-import Login from './TypeModal/Login';
-import Register from './TypeModal/Register';
-import { useEffect, useState } from 'react';
+import { MENU_LOGIN, MENU_REGISTER } from '../../data/dataModal';
+import { CloseIcon, ArrowLeftIcon,ArrowDownIcon } from '../Icon';
+import Button from '../Button';
+
 const cx = classNames.bind(styles);
 
-const Modal = ({ isShowing, hide }) => {
-    const [nameModal, setNameModal] = useState('login');
+function Modal({ modalHide }) {
+    const [tabList, setTabList] = useState([MENU_LOGIN]);
+    const [quantity, setQuantity] = useState(3);
+    const [isRegister, setIsRegister] = useState(false);
 
-    const handleSetNameModal = (e) => {
-        setNameModal(e);
-    };
-    const [TypeModal, setTypeModal] = useState(<Login onclick={handleSetNameModal} />);
-    const [showIconBack, setShowIconBack] = useState(false);
-
-    useEffect(() => {
-        switch (nameModal) {
-            case 'login':
-                setShowIconBack(false);
-                setTypeModal(<Login onclick={handleSetNameModal} />);
-                break;
-            case 'register':
-                setShowIconBack(false);
-                setTypeModal(<Register />);
-                break;
-            case 'qrcode':
-                setShowIconBack(true);
-                setTypeModal(<Qrcode />);
-                break;
-            default:
-                setTypeModal(<Login />);
-        }
-    }, [nameModal]);
-
+    const curent = tabList[tabList.length - 1];
+    // console.log(curent);
     const hideModal = () => {
-        setNameModal('login');
-        hide();
+        modalHide();
     };
 
-    const changeTypeModal = (e) => {
+    const handleBack = () => {
+        setTabList((prev) => prev.slice(0, 1));
+    };
+
+    const changeModal = (e)=>{
         e.preventDefault();
-        if (nameModal === 'login') {
-            setNameModal('register');
-        } else {
-            setNameModal('login');
-        }
-    };
-
-    const handleBack = ()=>{
-        switch (nameModal) {
-            case 'qrcode':
-                setTypeModal(<Login onclick={handleSetNameModal} />);
-                setNameModal('login');
-                break;
-            case 'login':
-                setShowIconBack(false);
-                setTypeModal(<Login onclick={handleSetNameModal} />);
-                break;
-            
-            default:
-                setTypeModal(<Login onclick={handleSetNameModal} />);
+        if(!isRegister){
+            setTabList([MENU_REGISTER]);
+            setIsRegister(true);
+        }else{
+            setTabList([MENU_LOGIN]);
+            setIsRegister(false);
+            setQuantity(3)
         }
     }
-    return isShowing
-        ? ReactDOM.createPortal(
-              <div className={cx('wrapper')}>
-                  <div className={cx('overlay')}></div>
-                  <div className={cx('content')}>
-                      <header className={cx('header')}>
-                          <i className={cx('icon-back')} onClick = {handleBack}>{showIconBack ? <ArrowLeftIcon /> : ''}</i>
-                          <i className={cx('icon-close')} onClick={hideModal}>
-                              <CloseIcon />
-                          </i>
-                      </header>
-                      <div className={cx('body')}>{TypeModal}</div>
-                      <div className={cx('footer')}>
-                          <span className={cx('text')}>
-                              {nameModal === 'login' ? 'Bạn không có tài khoản ?' : 'Bạn đã có tài khoản ?'}
-                          </span>
-                          <Link
-                              to={`/${nameModal === 'login' ? 'register' : 'login'}`}
-                              className={cx('link')}
-                              onClick={changeTypeModal}
-                          >
-                              {nameModal === 'login' ? 'Đăng ký' : 'Đăng nhập'}
-                          </Link>
-                      </div>
-                  </div>
-              </div>,
 
-              document.body,
-          )
-        : null;
-};
+    return (
+        <div className={cx('wrapper')}>
+            <div className={cx('overlay')}></div>
+            <div className={cx('content')}>
+                <header className={cx('header')}>
+                    <i className={cx('icon-back')} onClick={handleBack}>
+                        {tabList.length > 1 ? <ArrowLeftIcon /> : ''}
+                    </i>
+                    <i className={cx('icon-close')} onClick={hideModal}>
+                        <CloseIcon />
+                    </i>
+                </header>
+                {/* Body */}
+                <div className={cx('body')}>
+                    {curent && (
+                        <div className={cx('container')}>
+                            <h1 className={cx('title')}>{curent.title}</h1>
+                            <div className={cx('content-sub')}>
+                                <div className={cx('list')}>
+                                    {curent.type === 'children' ? (
+                                        <curent.data />
+                                    ) : (
+                                        curent.data.slice(0, isRegister === true ? quantity : curent.length ).map((item, index) => {
+                                            return (
+                                                <div key={index} className={cx('btn')}>
+                                                    <Button
+                                                        disabled={item.disabled}
+                                                        onclick={() => {
+                                                            setTabList((prev) => [...prev, item.children]);
+                                                        }}
+                                                        to={item.path}
+                                                        outline
+                                                        iconLeft={item.icon}
+                                                    >
+                                                        {item.title}
+                                                    </Button>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+
+                                    {isRegister ? (
+                                        <div>
+                                            <i
+                                                className={cx(
+                                                    'icon',
+                                                    `${quantity === curent.length ? 'hide' : ''}`,
+                                                )}
+                                                onClick={() => {
+                                                    setQuantity(curent.length);
+                                                }}
+                                            >
+                                                <ArrowDownIcon />
+                                            </i>
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className={cx('footer')}>
+                    <span className={cx('text')}>
+                        {!isRegister  ? 'Bạn không có tài khoản ?' : 'Bạn đã có tài khoản ?'}
+                    </span>
+                    <a href="" className={cx('link')} onClick={(e)=>{changeModal(e)}}>
+                        {!isRegister  ? 'Đăng ký' : 'Đăng nhập'}
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default Modal;

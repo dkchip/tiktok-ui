@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,useContext} from 'react';
 import classnames from 'classnames/bind';
 import style from './Siderbar.module.scss';
 import { Link } from 'react-router-dom';
 
+import { ModalContextKeys } from '../../../contexts/ModalContext';
+import store from '../../../redux/store';
 import MenuAccounts from './SuggestedAccounts/MenuAccounts';
 import AcountItem from './SuggestedAccounts/AcountItem';
 import Menu from './Menu';
@@ -17,11 +19,10 @@ import {
     TagIcon,
     MusicIcon,
 } from '../../../components/Icon';
-import request from '../../../utils/request';
-import { curentUser } from '../../curentUser.js';
+import { getSuggestedUsers, getFollowingdUsers, getSuggestedUsersAuth } from '../../../services/userServices';
 import Button from '../../../components/Button';
-import useModal from '../../../hooks/useModal';
-import Modal from '../../../components/Modal/Modal';
+import Cookies from 'js-cookie';
+
 
 const cx = classnames.bind(style);
 const LIST_DISCOVER = [
@@ -105,44 +106,53 @@ const LIST_ITEM_FOOTER = [
 ];
 
 function Sidebar({ wider }) {
+    const token = Cookies.get('tokenAuth');
+    const authData = store.getState();
     const [data, setData] = useState([]);
     let [quantity, setQuantity] = useState(5);
-    let [accFollowings, setAccFollowing] = useState([]);
-    const {isShowing,toggle} = useModal();
+    const [page, setPage] = useState(1);
+    const [accFollowings, setAccFollowing] = useState([]);
+    const [metaFollowings, setMetaFollowings] = useState();
+    const {isShowingLogin} = useContext(ModalContextKeys);
 
     useEffect(() => {
-        request
-            .get('users/suggested', {
-                params: {
-                    page: 1,
-                    per_page: quantity,
-                },
-            })
+       if(authData.auth){
+           getSuggestedUsersAuth(1,quantity,token)
             .then((res) => {
-                setData(res.data.data);
-            });
+                setData(res.data);
+            })
+       }else{
+            getSuggestedUsers(1, quantity).then((res) => {
+            setData(res.data);
+        });
+       }
+       // eslint-disable-next-line
     }, [quantity]);
 
     useEffect(() => {
-        // request.get('me/followings',{
-        //     params : {
-        //         page :1
-        //     }
-        // })
-        // .then((res)=>{
-        //     setAccFollowing(res)
-        // })
-        // .catch(()=>{
-        //     console.log('loi!')
-        // })
-        setAccFollowing([]);
-    }, []);
+        if (authData.auth) {
+            getFollowingdUsers(page, token).then((res) => {
+                setAccFollowing((prev) => [...prev,...res.data]);
+                setMetaFollowings(res.meta)
+            });
+        }
+        // eslint-disable-next-line
+    }, [page]);
+
 
     const handleSeeMore = () => {
         if (quantity === 5) {
             setQuantity(20);
         } else {
             setQuantity(5);
+        }
+    };
+    const handleSeeMoreFollowing = () => {
+        if(page !== metaFollowings.pagination.total_pages ){
+            setPage(page + 1)
+        }else{
+            setPage(1);
+            setAccFollowing([])
         }
     };
 
@@ -169,15 +179,19 @@ function Sidebar({ wider }) {
                             </Menu>
                         </div>
 
-                        <div className={cx('log-in', 'line-top')}>
-                            <div className={cx('btn-wrap')}>
-                                <span className={cx('title')}>
-                                    Đăng nhập để follow các tác giả, thích video và xem bình luận.
-                                </span>
-                                <Button onClick ={toggle} large>Đăng nhập</Button>
-                                <Modal isShowing={isShowing} hide ={toggle}></Modal>   
+                        {authData.auth ? null : (
+                            <div className={cx('log-in', 'line-top')}>
+                                <div className={cx('btn-wrap')}>
+                                    <span className={cx('title')}>
+                                        Đăng nhập để follow các tác giả, thích video và xem bình luận.
+                                    </span>
+                                    <Button onClick={isShowingLogin} large>
+                                        Đăng nhập
+                                    </Button>
+                                    {/* <Modal isShowing={isShowing} hide ={toggle}></Modal>    */}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         <div className={cx('user-suggest-container', 'line-top')}>
                             <MenuAccounts title={'Tài khoản được đề xuất'}>
@@ -190,33 +204,40 @@ function Sidebar({ wider }) {
                                 {quantity === 5 ? 'Xem tất cả' : 'Ẩn bớt'}
                             </button>
                         </div>
-                        {curentUser === true ? (
+                        {authData.auth === true && metaFollowings ? (
                             <div className={cx('following-account', 'line-top')}>
                                 {/* Account-following */}
 
                                 <MenuAccounts title="Tài khoản đang followings">
-                                    {accFollowings > 0 ? (
-                                        accFollowings.map((accFollowing) => {
-                                            return <AcountItem key={accFollowing.id} accFollowing={accFollowing} />;
+                                    {accFollowings.length > 0 ? (
+                                        accFollowings.map((item,index) => {
+                                            return <AcountItem key={index} data={item} />;
                                         })
+
                                     ) : (
                                         <p className={cx('des-following')}>
                                             Những tài khoản bạn đang follow sẽ xuất hiện ở đây
                                         </p>
                                     )}
+
+                                    {/* Button */}
+
+                                    {
+                                        metaFollowings.pagination.total_pages  > 1 
+                                        ? (
+                                            <button
+                                                    className={cx('btn')}
+                                                    type="button"
+                                                    onClick={handleSeeMoreFollowing}
+                                                >
+                                                    {page !== metaFollowings.pagination.total_pages ? 'Xem thêm' : 'Ẩn bớt'}
+                                                </button>
+                                           )
+                                        :undefined
+                                    }
                                 </MenuAccounts>
                             </div>
-                        ) : // (
-                        //     accFollowings > 0
-                        //         ?   (
-                        //             <button className={cx('btn')} type="button" onClick={handleSeeMore}>
-                        //                 {quantity === 5 ? 'Xem tất cả' : 'Ẩn bớt'}
-                        //             </button>
-                        //             )
-                        //         : undefined
-
-                        //   )
-                        undefined}
+                        ) : undefined}
 
                         <div className={cx('discover-list', 'line-top')}>
                             {LIST_DISCOVER.map((item, index) => {

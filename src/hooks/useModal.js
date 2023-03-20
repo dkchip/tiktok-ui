@@ -1,15 +1,23 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
-const useModal = ()=>{
+function useModal(ModalComponent){
     const [isShowing,setIsShowing] = useState(false)
+    const modalShowing = ()=>{
+        setIsShowing(true)
+    }
+
+    function modalHide(){
+        setIsShowing(false);
+    }
+
+    const ModalExport = ({data})=>{
+        return isShowing && createPortal(<ModalComponent data = {data}  modalHide = {modalHide} />,document.body)
+    }
     
-    function toggle(){
-        setIsShowing(!isShowing)
-    }
-    return {
-        isShowing,
-        toggle
-    }
+    return  [ModalExport,modalShowing,isShowing]
+       
+    
 }
 
 export default useModal;
