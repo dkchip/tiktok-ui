@@ -83,7 +83,7 @@ function AcountItem({ data ,following = false}) {
             {!following ? (<Tippy
                 delay={[600, 500]}
                 appendTo ={()=> document.body}
-                interactive = {false}
+                interactive = {true}
                 placement="bottom"
                 render={(attrs) => (
                     <div className={cx('account-preview')} {...attrs}>
