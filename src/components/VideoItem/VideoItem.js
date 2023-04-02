@@ -201,10 +201,10 @@ function VideoItem({
         })
 
         if(followingPage){
-            dispatch(updateVideoFollowing(tempDataAllVideos));
+            dispatch(updateVideoFollowing(newDataAllVideos));
 
         }else{
-            dispatch(updateVideo(tempDataAllVideos));
+            dispatch(updateVideo(newDataAllVideos));
         }
 
     }
