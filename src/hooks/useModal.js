@@ -15,7 +15,7 @@ function useModal(ModalComponent){
         return isShowing && createPortal(<ModalComponent data = {data}  modalHide = {modalHide} />,document.body)
     }
     
-    return  [ModalExport,modalShowing,isShowing]
+    return  [ModalExport,modalShowing,isShowing,modalHide]
        
     
 }

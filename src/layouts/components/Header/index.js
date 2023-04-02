@@ -1,24 +1,21 @@
-import { useState ,useContext, useEffect} from 'react';
+import { useState ,useContext} from 'react';
 import { ModalContextKeys } from '../../../contexts/ModalContext';
 import classnames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { ModalLoadingContextKeys } from '../../../contexts/ModalLoadingContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Cookies from 'js-cookie';
 import {
         faPlus,
         faEllipsisVertical,
-        faEarthAsia,
-        faQuestion,
-        faKeyboard,
         faSignOut,
         faUser,
         faCoins,
         faGear
       } from '@fortawesome/free-solid-svg-icons';
 
-import Cookies from 'js-cookie';
 import { logoutUser } from '../../../services/userServices';
-import store from '../../../redux/store';
 import routesConfig from '../../../config/routes';
 import { MessageIcon,InboxIcon } from '../../../components/Icon';
 import style from './Header.module.scss';
@@ -29,81 +26,56 @@ import Image from '../../../components/Image';
 import Search from '../Search';
 import Mail from '../../../components/Popper/Mail';
 import { Link } from 'react-router-dom';
-
-
+import { useSelector } from 'react-redux';
+import { MENU_ITEM } from '../../../data/dataMenu';
 
 const cx = classnames.bind(style);
-const MENU_ITEM = [
-    {
-        icon : <FontAwesomeIcon icon = {faEarthAsia} />,
-        title : 'Tiếng Việt',
-        children:{
-            title: 'Language',
-            data :[
-                {
-                    title : 'Tiếng Việt',
-                    code : 'vi'
-                },
-                {
-                    title : 'English',
-                    code : 'en'
-                } 
-            ]
-        }
-    },
-    {
-        icon : <FontAwesomeIcon icon = {faQuestion} />,
-        title : 'Phản hòi và trợ giúp',
-        path:'/feedback'
-    },
-    {
-        icon : <FontAwesomeIcon icon = {faKeyboard} />,
-        title : 'Phím tắt trên bàn phím'
-    }
-]
 
-const userMenu =[
-    {
-        icon : <FontAwesomeIcon icon = {faUser} />,
-        title : 'Xem hồ sơ ',
-        path : '/profile'
-    },
-    {
-        icon : <FontAwesomeIcon icon = {faCoins} />,
-        title : 'Nhận xu',
-        path : '/getcoin'
-    },
-    {
-        icon : <FontAwesomeIcon icon = {faGear} />,
-        title : 'Cài đặt',
-        path : '/setting'
-
-    },
-    ...MENU_ITEM,
-    {
-        icon : <FontAwesomeIcon icon = {faSignOut} />,
-        title : 'Đăng xuất',
-        path : '/',
-        onClick : ()=>{
-
-            logoutUser(Cookies.get("tokenAuth"))
-            .then(()=>{
-                Cookies.remove("tokenAuth")     
-                window.location.reload();
-            })
-
-                
-        },
-        separate : true,
-    }
-]
 
 
 
 function Header({wider}) {
-    const authData = store.getState();
+ const { isShowingModalLoad, isHideModalLoad } = useContext(ModalLoadingContextKeys);
+ const userMenu = [
+    {
+        icon: <FontAwesomeIcon icon={faUser} />,
+        title: 'Xem hồ sơ ',
+        path: '/profile',
+    },
+    {
+        icon: <FontAwesomeIcon icon={faCoins} />,
+        title: 'Nhận xu',
+        path: '/getcoin',
+    },
+    {
+        icon: <FontAwesomeIcon icon={faGear} />,
+        title: 'Cài đặt',
+        path: '/setting',
+    },
+    ...MENU_ITEM,
+    {
+        icon: <FontAwesomeIcon icon={faSignOut} />,
+        title: 'Đăng xuất',
+        path: '/',
+        onClick: () => {
+
+            isShowingModalLoad();
+            setTimeout(() => {
+                logoutUser(Cookies.get('tokenAuth'))
+                    .then(() => {
+                        Cookies.remove('tokenAuth');
+                        window.location.reload();
+                        isHideModalLoad();
+                    });
+            }, 500);
+        },  
+        separate: true,
+    },
+];
+    const authData = useSelector((state)=>state.user);
     const [visible,setVisible] = useState(false)
     const {isShowingLogin} = useContext(ModalContextKeys)
+
 
     const show = () =>{
         setVisible(true)

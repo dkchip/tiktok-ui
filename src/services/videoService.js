@@ -46,6 +46,7 @@ export const getVideosAuth = async (page,type,token)=>{
     }
 }
 
+
 export const getAnVideoAuth = async (uuid,token)=>{
     try{
         const res = await request.get(`videos/${uuid}`,{
@@ -58,6 +59,7 @@ export const getAnVideoAuth = async (uuid,token)=>{
         console.log(e)
     }
 }
+
 
 
 export const likeVideos = async (idVideo,token)=>{

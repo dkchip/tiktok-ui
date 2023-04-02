@@ -14,7 +14,7 @@ function Modal({ modalHide }) {
     const [isRegister, setIsRegister] = useState(false);
 
     const curent = tabList[tabList.length - 1];
-    // console.log(curent);
+    
     const hideModal = () => {
         modalHide();
     };
@@ -34,6 +34,7 @@ function Modal({ modalHide }) {
             setQuantity(3)
         }
     }
+
 
     return (
         <div className={cx('wrapper')}>
@@ -76,7 +77,7 @@ function Modal({ modalHide }) {
                                         })
                                     )}
 
-                                    {isRegister ? (
+                                    {isRegister && curent.type !== 'children' ? (
                                         <div>
                                             <i
                                                 className={cx(

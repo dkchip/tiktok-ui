@@ -5,22 +5,25 @@ import Mainlayout from './layouts/Mainlayout';
 import ModalContext from './contexts/ModalContext';
 import Cookies from 'js-cookie';
 import { getAuth } from './services/userServices';
-import store from './redux/store';
-import { setUser, deleteUser } from './redux/actions';
+import { useDispatch } from 'react-redux';
+import { setUser,deleteUser } from './store/slices/userSlice';
+
+
 
 function App() {
+    const dispatch = useDispatch();
     const [loadingData, setLoadingData] = useState(false);
     useEffect(() => {
         (function () {
             if (Cookies.get('tokenAuth')) {
                 getAuth(Cookies.get('tokenAuth'))
                     .then((res) => {
-                        store.dispatch(setUser(res.data));
+                        dispatch(setUser(res.data))
                         setLoadingData(true);
                     })
                     .catch((e) => {});
             } else {
-                store.dispatch(deleteUser({}));
+                dispatch(deleteUser({}));
                 setLoadingData(true);
             }
         })();
@@ -47,6 +50,7 @@ function App() {
 
                             return (
                                 <Route
+                                    
                                     key={index}
                                     path={route.path}
                                     element={

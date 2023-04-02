@@ -18,6 +18,7 @@ function Button({
     outlinePrimary = false ,
     small = false,
     large = false,
+    following = false,
     onclick,
     disabled,
     ...passProps
@@ -55,7 +56,8 @@ function Button({
         outline,
         outlinePrimary,
         primaryChange,
-        disabled
+        disabled,
+        following
     });
 
     return (

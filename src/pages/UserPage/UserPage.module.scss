@@ -41,6 +41,26 @@
     margin-bottom: 8px;
 }
 
+.btn{
+    width: 146px;
+    height: 36px;
+    display: flex;
+    overflow: hidden;
+
+    
+}
+
+.btn-unfollow{
+    width: 100%;
+    margin-left: 10px;
+    height: 100%;
+    border:1px solid #ccc;
+    border-radius: 4px;
+    &:hover{
+        background: var(--background-color-hover);
+    }
+}
+
 .count-info {
     display: flex;
     margin-top: 10px;
@@ -136,7 +156,13 @@
     transition: transform 0.3s ease 0s;
 }
 
+.video-wraper{
+    width: 100%;
+
+}
+
 .video-list {
+
     margin-top: 10px;
     display: grid;
     gap: 24px 16px;
@@ -208,4 +234,12 @@
 
 .desc{
     color: rgba(22, 24, 35, 0.75);
+}
+
+.title{
+    font-size: 1.6rem;
+    line-height: 22px;
+    font-weight: 400;
+    color: rgba(22, 24, 35, 0.75);
+    margin-top: 8px;
 }

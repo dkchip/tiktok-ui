@@ -55,7 +55,7 @@ function Search() {
                 render={(attrs) => (
                     <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <Wrapper>
-                            <h4 className={cx('search-account')}>Tai Khoan</h4>
+                            <h4 className={cx('search-account')}>Tài Khoản</h4>
                             {searchResult.map((result) => {
                                 return <AccountItem key={result.id} data={result} />;
                             })}

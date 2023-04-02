@@ -1,16 +1,24 @@
+import { useRef, useState,useContext } from 'react';
+
 import classNames from 'classnames/bind';
 import styles from './UserPage.module.scss';
 
 import { VideoPublic} from '../../components/Video';
 import { Link } from 'react-router-dom';
 import { PlayOutlineIcon } from '../../components/Icon';
-import { useRef, useState } from 'react';
-
+import { ModalContextKeys } from '../../contexts/ModalContext';
 const cx = classNames.bind(styles);
 
 function Video({data}) {
     const [videoPlaying,setVideoPlaying] = useState(false);
     const videoRef = useRef()
+    const {isShowingModalVideo,setTypeModal} = useContext(ModalContextKeys);
+
+
+    const handleClick = ()=>{
+        isShowingModalVideo();
+        setTypeModal("user");
+    }
 
     const handlePlay = ()=>{
         if(videoPlaying === false){
@@ -29,6 +37,7 @@ function Video({data}) {
              className={cx('video-container')}  
              onMouseOver ={handlePlay}
              onMouseLeave = {handlePause}
+             onClick ={handleClick}
         >
             <div style={{ position: 'relative' }}>
                 <div style={{ paddingTop: '136%' }}>

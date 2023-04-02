@@ -30,10 +30,13 @@ import AccountPreview from '../AccountPreview/AccountPreview';
 import Image from '../Image';
 import styles from './VideoItem.module.scss';
 import classNames from 'classnames/bind';
-import store from '../../redux/store';
 import { likeVideos, unLikeVideos } from '../../services/videoService';
+import { followUser,unfollowUser } from '../../services/userServices';
 import Cookies from 'js-cookie';
-import { followUser, unfollowUser } from '../../services/userServices';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { updateVideo,updateVideoFollowing } from '../../store/slices/videosSlice';
+import { updateAccount } from '../../store/slices/accountSlice';
 
 const cx = classNames.bind(styles);
 
@@ -87,22 +90,23 @@ function VideoItem({
     volume,
     setVolume,
     index,
-    dataAll,
     interaction,
     setInteraction,
-    dataFollower,
-    setDataFollower,
+    followingPage = false
 }) {
 
-    const { auth } = store.getState();
-    const [playing, setPlaying] = useState(false);
-    const [liked, setLiked] = useState(data.is_liked);
-    const [following, setFollowing] = useState(data.user.is_followed);
-    const [likeCounts, setLikeCount] = useState(data.likes_count);
-    // const [dataComments, setDataComments] = useState([]);
-    const videoRef = useRef(null);
-    const { isShowingLogin, isShowingModalVideo, setDataVideo, setIndexVideo } = useContext(ModalContextKeys);
+    const { auth } = useSelector((state)=>state.user);
+    const dataAllVideos =  useSelector((state)=>state.videos).dataAllVideos;
+    const dataAllVideosFollowing = useSelector((state)=>state.videos).dataAllVideosFollowing
+    const dataAll = followingPage ? dataAllVideosFollowing : dataAllVideos; 
+    
+    const dispatch = useDispatch();
 
+    const [playing, setPlaying] = useState(false);
+    const videoRef = useRef(null);
+    const { isShowingLogin, isShowingModalVideo, setIndexVideo ,setTypeModal} = useContext(ModalContextKeys);
+
+    const {dataAccounts} = useSelector((state)=> state.accounts);
     const options = {
         root: null,
         rootMargin: '0px',
@@ -114,8 +118,13 @@ function VideoItem({
     const handleClick = () => {
         isShowingModalVideo();
         setIndexVideo(index);
-        setDataVideo(dataAll[index]);
         setInteraction(false);
+        if(followingPage){
+            setTypeModal("following");
+        }else{
+            setTypeModal("home");
+
+        }
     };
 
     const onVideoClick = () => {
@@ -155,14 +164,6 @@ function VideoItem({
         videoRef.current.volume = volume;
     }, [volume]);
 
-    useEffect(()=>{
-        if(dataFollower === `follow ${data.user.id}`){
-            setFollowing(true);
-        }else if(dataFollower === `unfollow ${data.user.id}`){
-            setFollowing(false);
-        }
-        // eslint-disable-next-line
-    },[dataFollower])
 
     const handleVolume = () => {
         if (volume === '0') {
@@ -172,26 +173,67 @@ function VideoItem({
         }
     };
 
+    
+
+    const updateVideos = (data) => {
+        const indexVideo = dataAll.findIndex((video)=>{
+            return video.uuid === data.uuid;
+        }) 
+        const tempDataAllVideos = [...dataAll]
+        tempDataAllVideos[indexVideo] = data;
+        if(followingPage){
+            dispatch(updateVideoFollowing(tempDataAllVideos));
+
+        }else{
+            dispatch(updateVideo(tempDataAllVideos));
+        }
+
+    }
+
+    const updateUser = (data,dataAll) => {
+        const tempDataAllVideos = [...dataAll]
+        const newDataAllVideos = tempDataAllVideos.map((item) =>  {
+            if(item.user.id === data.id) {
+
+              return  { ...item , user : data}
+            }
+            return item
+        })
+
+        if(followingPage){
+            dispatch(updateVideoFollowing(tempDataAllVideos));
+
+        }else{
+            dispatch(updateVideo(tempDataAllVideos));
+        }
+
+    }
+
+    const handleUpdateAccount = (data,dataAll)=>{
+        const indexItem = dataAll.findIndex((item)=>{
+            return item.id === data.id;
+        })
+        const newDataAccounts = [...dataAll];
+        newDataAccounts[indexItem] = data;
+        dispatch(updateAccount(newDataAccounts));
+    }
+
     // handle request
     const token = Cookies.get('tokenAuth');
-    const requestLikeVideo = () => {
-        likeVideos(data.uuid, token);
-    };
 
-    const requestUnLikeVideo = () => {
-        unLikeVideos(data.uuid, token);
-    };
 
     const handleLikeVideo = () => {
         if (auth) {
-            if (liked) {
-                setLiked(!liked);
-                setLikeCount(likeCounts - 1);
-                requestUnLikeVideo();
+            if (data.is_liked) {
+                unLikeVideos(data.uuid, token)
+                .then((res)=>{
+                    updateVideos(res.data.data)
+                })
             } else {
-                setLiked(!liked);
-                setLikeCount(likeCounts + 1);
-                requestLikeVideo();
+                likeVideos(data.uuid, token)
+                .then((res)=>{
+                    updateVideos(res.data.data)
+                })
             }
         } else {
             isShowingLogin();
@@ -200,17 +242,29 @@ function VideoItem({
 
     
     const handleFollow = () => {
-        followUser(data.user.id, token);
-        setFollowing(true);
-        setDataFollower(`follow ${data.user.id}`);
+
+       if(auth){
+        if(data.user.is_followed){
+            unfollowUser(data.user.id, token)
+            .then((res)=>{
+                
+                updateUser(res.data,dataAll);
+                handleUpdateAccount(res.data,dataAccounts)
+            })
+       }else{
+            followUser(data.user.id, token)
+            .then((res)=>{
+                updateUser(res.data,dataAll)
+                handleUpdateAccount(res.data,dataAccounts)
+            })
+        
+       }
+       }else{
+        isShowingLogin();
+       }
+
     };
 
-    const handleUnFollow = () => {
-        unfollowUser(data.user.id, token);
-        setFollowing(false);
-        setDataFollower(`unfollow ${data.user.id}`);
-
-    };
 
 
 
@@ -226,10 +280,10 @@ function VideoItem({
                             <Wrapper>
                                 {
                                     auth ? (
-                                                following ? (
+                                        data.user.is_followed ? (
                                                     <AccountPreview
                                                         data={data.user}
-                                                        onClick={handleUnFollow}
+                                                        onClick={handleFollow}
                                                         outline
                                                         nameBtn="Đang Follow"
                                                     />
@@ -278,19 +332,21 @@ function VideoItem({
                         </Link>
                     </div>
                     {auth ? (
-                        !following ? (
-                            <div className={cx('btn')}>
-                                <Button outlinePrimary onClick={handleFollow}>
-                                    Follow
-                                </Button>
-                            </div>
-                        ) : (
-                            <div className={cx('btn')}>
-                                <Button outline onClick={handleUnFollow}>
-                                    Đang follow
-                                </Button>
-                            </div>
-                        )
+                        !followingPage ? (
+                            !data.user.is_followed ? (
+                                <div className={cx('btn')}>
+                                    <Button outlinePrimary onClick={handleFollow}>
+                                        Follow
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className={cx('btn')}>
+                                    <Button outline onClick={handleFollow}>
+                                        Đang follow
+                                    </Button>
+                                </div>
+                            )
+                        ) :(null)
                     ) : (
                         <div className={cx('btn')}>
                             <Button
@@ -381,9 +437,9 @@ function VideoItem({
                     <div className={cx('action-item')}>
                         <button>
                             <i className={cx('icon')} onClick={handleLikeVideo}>
-                                {auth ? liked ? <LikeIconActive /> : <LikeIcon /> : <LikeIcon />}
+                                {auth ? data.is_liked ? <LikeIconActive /> : <LikeIcon /> : <LikeIcon />}
                             </i>
-                            <p className={cx('like-count')}>{likeCounts}</p>
+                            <p className={cx('like-count')}>{data.likes_count}</p>
                         </button>
                         <button>
                             <i

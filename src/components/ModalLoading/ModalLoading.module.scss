@@ -1,63 +1,20 @@
-.container{
-    width: 720px;
-    height: auto;
-    padding-top: 20px;
-}
-
-.card-player{
-    margin-right: 14px;
-    width: 226px;
-    height: 302px;
-    float: left;
-    border-radius: 8px;
-    margin-bottom: 18px;
-}
-
-.link-profile{
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-.info-container{
-    width: 100%;
-    height: 200px;
-    padding: 30px 12px 20px;
+.wrapper{
+    position: fixed;
+    inset: 0;
+    background-color: rgba(255,255,255,0.6);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 20;
-
-    & img{
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        margin-bottom: 14px;
-    }
+    z-index: 9999999999;
 }
 
-.full-name{
-    font-size: 1.8rem;
-    color: var(--white);
-}
+.content{
+    width: 120px;
+    height: 200px;
 
-.nick-name{
-    font-size: 1.4rem;
-    color: var(--white);
 }
 
 
-//css loading icon
-
-.load-icon{
-    margin-top: 20px;
-    width: 100%;
-    text-align: center;
-}
 
 @keyframes ldio-ol68y82xof9-o {
     0%    { opacity: 1; transform: translate(0 0) }
@@ -72,8 +29,8 @@
 }
 .ldio-ol68y82xof9 div {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   top: 40px;
   left: 50%;
@@ -95,10 +52,11 @@
 }
 .loadingio-spinner-dual-ball-lwjvw2p7xft {
   width: 100%;
-  height: 200px;
+  height: 76px;
   display: inline-block;
   overflow: hidden;
-  background: #ffffff;
+background-color: transparent;
+
 }
 .ldio-ol68y82xof9 {
   width: 100%;

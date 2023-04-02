@@ -4,7 +4,6 @@ import style from './Siderbar.module.scss';
 import { Link } from 'react-router-dom';
 
 import { ModalContextKeys } from '../../../contexts/ModalContext';
-import store from '../../../redux/store';
 import MenuAccounts from './SuggestedAccounts/MenuAccounts';
 import AcountItem from './SuggestedAccounts/AcountItem';
 import Menu from './Menu';
@@ -22,7 +21,8 @@ import {
 import { getSuggestedUsers, getFollowingdUsers, getSuggestedUsersAuth } from '../../../services/userServices';
 import Button from '../../../components/Button';
 import Cookies from 'js-cookie';
-
+import { useSelector,useDispatch } from 'react-redux';
+import { setAccount,updateAccount } from '../../../store/slices/accountSlice';
 
 const cx = classnames.bind(style);
 const LIST_DISCOVER = [
@@ -106,9 +106,11 @@ const LIST_ITEM_FOOTER = [
 ];
 
 function Sidebar({ wider }) {
+    const dispatch = useDispatch();
     const token = Cookies.get('tokenAuth');
-    const authData = store.getState();
-    const [data, setData] = useState([]);
+    const authData = useSelector((state)=>state.user);
+
+    const data = useSelector((state)=>state.accounts).dataAccounts;
     let [quantity, setQuantity] = useState(5);
     const [page, setPage] = useState(1);
     const [accFollowings, setAccFollowing] = useState([]);
@@ -119,11 +121,12 @@ function Sidebar({ wider }) {
        if(authData.auth){
            getSuggestedUsersAuth(1,quantity,token)
             .then((res) => {
-                setData(res.data);
+                dispatch(updateAccount(res.data))
+
             })
        }else{
             getSuggestedUsers(1, quantity).then((res) => {
-            setData(res.data);
+                dispatch(updateAccount(res.data))
         });
        }
        // eslint-disable-next-line
@@ -195,7 +198,7 @@ function Sidebar({ wider }) {
 
                         <div className={cx('user-suggest-container', 'line-top')}>
                             <MenuAccounts title={'Tài khoản được đề xuất'}>
-                                {data.map((item) => {
+                                {data && data.map((item) => {
                                     return <AcountItem key={item.id} data={item} />;
                                 })}
                             </MenuAccounts>
@@ -211,7 +214,7 @@ function Sidebar({ wider }) {
                                 <MenuAccounts title="Tài khoản đang followings">
                                     {accFollowings.length > 0 ? (
                                         accFollowings.map((item,index) => {
-                                            return <AcountItem key={index} data={item} />;
+                                            return <AcountItem key={index} data={item} following />;
                                         })
 
                                     ) : (

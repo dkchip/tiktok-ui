@@ -65,12 +65,29 @@ export const getSearchUsers = async (name,type)=>{
     }
 }
 
-export const getProfileUser = async (name)=>{
+export const getProfileUser = async (name,token)=>{
     try{
-        const res = await request.get(`users/@${name}`)
+        const res = await request.get(`users/@${name}`,{
+            headers : {
+                Authorization : `Bearer ${token}`
+            }
+        })
         return res.data;
     }catch(error){
         console.log(error)
+    }
+}
+
+export const registerUser = async (email,password,type = "email")=>{
+    try{
+        const res = await  request.post("auth/register",{
+            type : type,
+            email: email,
+            password: password
+        })
+        return res.data;
+    }catch(error){
+        return error
     }
 }
 

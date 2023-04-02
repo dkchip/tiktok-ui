@@ -4,7 +4,7 @@ import { PlayLargeIcon, VolumeOnIcon, ArrowNextIcon, ArrowPrevIcon, CloseWhiteIc
 import { useEffect, useRef, useState } from 'react';
 
 const cx = classNames.bind(styles);
-function VideoMode({ modalHide, data, dataAll, indexVideo, handleNext, handlePrev, volumeModal, setVolumeModal }) {
+function VideoMode({ modalHide, data, dataAll, indexVideo, handleNext, handlePrev, volumeModal, setVolumeModal,typeModal }) {
     const videoRef = useRef();
     const [isPlaying, setIsPlaying] = useState(true);
     const [progress, setProgress] = useState('0');
@@ -13,12 +13,14 @@ function VideoMode({ modalHide, data, dataAll, indexVideo, handleNext, handlePre
     const [durationInt, setDurationInt] = useState(null);
 
     useEffect(() => {
-        const handleScroll = () => {
-            const element = document.querySelector(`div[id ="${indexVideo}"]`);
-            element.scrollIntoView({ behavior: 'smooth' });
-        };
+        if(typeModal !== "user"){
+            const handleScroll = () => {
+                const element = document.querySelector(`div[id ="${indexVideo}"]`);
+                element.scrollIntoView({ behavior: 'smooth' });
+            };
 
-        handleScroll();
+            handleScroll();
+        }
     }, [indexVideo]);
 
     useEffect(() => {

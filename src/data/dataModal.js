@@ -1,5 +1,6 @@
 import QrCode from "../components/Modal/TypeModal/Qrcode";
 import Login from "../components/Modal/TypeModal/Login";
+import Register from "../components/Modal/TypeModal/Register";
 import {
     QrIcon,
     UserIcon,
@@ -88,6 +89,12 @@ export const MENU_REGISTER = {
         {
             title: 'Sử dụng số điện thoại hoặc email',
             icon: <UserIcon />,
+            children :{
+                title : "Đăng Ký",
+                type : "children",
+                data : Register
+            }
+            
         },
         {
             title: 'Tiếp tục với Facebook',

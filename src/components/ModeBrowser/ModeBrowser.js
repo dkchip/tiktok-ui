@@ -3,8 +3,9 @@ import styles from './ModeBrowser.module.scss';
 import VideoMode from './Video/VideoMode';
 import Button from '../Button';
 import { useEffect, useState,useContext } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { getComments } from '../../services/videoService';
+
 import {
     MusicIcon,
     LikeIcon,
@@ -20,70 +21,149 @@ import {
     // LikeCommentActiveIcon,
 } from '../Icon';
 import Tippy from '@tippyjs/react';
-import store from '../../redux/store';
+import { useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 import { followUser,unfollowUser } from '../../services/userServices';
 import { likeVideos,unLikeVideos } from '../../services/videoService';
 import { ModalContextKeys } from '../../contexts/ModalContext';
+import { updateVideo ,updateVideoFollowing,setVideosUser} from '../../store/slices/videosSlice';
+import { updateAccount } from '../../store/slices/accountSlice';
+import { setOtherUser } from '../../store/slices/userSlice';
 
 const cx = classNames.bind(styles);
 function ModeBrowser({ modalHide, data = [] }) {
-    const {auth} = store.getState();
+    const {auth} = useSelector((state)=>state.user);
     const token = Cookies.get("tokenAuth")
     const {isShowingLogin} = useContext(ModalContextKeys);
+    const dispatch = useDispatch();
 
-    const [dataVideo, dataAll, indexVideo, setIndexVideo, setDataVideo] = data;
+    const [ indexVideo, setIndexVideo,typeModal] = data;
+
+
+
+    const dataAllVideo = useSelector((state)=>{
+        if(typeModal === "home"){
+            return state.videos.dataAllVideos
+        }else if(typeModal === "following"){
+             return state.videos.dataAllVideosFollowing
+        }else{
+            return state.videos.dataAllVideosUser;
+        }
+    });
+
+    const {dataAccounts} = useSelector((state)=> state.accounts);
+
+
+
+    const dataVideo = dataAllVideo[indexVideo];
     const [volumeModal, setVolumeModal] = useState('0.5');
     const [dataComments, setDataComments] = useState({});
-    const [following,setFollowing] = useState(dataVideo.user.is_followed);
-    const [liked,setLiked] = useState(dataVideo.is_liked);
-    const [countLike,setCountLike] = useState(dataVideo.likes_count)
 
 
+    const updateVideos = (data,dataAllVideos) => {
+
+        const indexVideo = dataAllVideos.findIndex((video)=>{
+            return video.uuid === data.uuid;
+        }) 
+        const tempDataAllVideos = [...dataAllVideos]
+        tempDataAllVideos[indexVideo] = data;
+        if(typeModal === "home"){
+            dispatch(updateVideo(tempDataAllVideos));
+        }else if(typeModal === "following"){
+            dispatch(updateVideoFollowing(tempDataAllVideos))
+        }else{
+            dispatch(setVideosUser(tempDataAllVideos))
+            dispatch(setOtherUser(data.user))
+        }
+    }
+
+    const updateUser = (data,dataAll) => {
+
+        const tempDataAllVideos = [...dataAll]
+        const newDataAllVideos = tempDataAllVideos.map((item) =>  {
+            if(item.user.id === data.id) {
+
+              return  { ...item , user : data}
+            }
+            return item
+        })
+        if(typeModal === "home"){
+            dispatch(updateVideo(newDataAllVideos));
+        }else if(typeModal === "following"){
+            dispatch(updateVideoFollowing(newDataAllVideos))
+        }else{
+            dispatch(setVideosUser(newDataAllVideos))
+            dispatch(setOtherUser(data))
+        }
+     
+        
+    }
+
+    const handleUpdateAccount = (data,dataAll)=>{
+        const indexItem = dataAll.findIndex((item)=>{
+            return item.id === data.id;
+        })
+        const newDataAccounts = [...dataAll];
+        newDataAccounts[indexItem] = data;
+        dispatch(updateAccount(newDataAccounts));
+    }
 
     useEffect(() => {
-        const uuid = data[0].uuid;
-        getComments(uuid, 'comments').then((res) => {
-            setDataComments(res.data.data);
-        });
+        // const uuid = data[0].uuid;
+        // getComments(uuid, 'comments').then((res) => {
+        //     setDataComments(res.data.data);
+        // });
     }, [data[0]]);
 
     const handleNextVideo = () => {
         setIndexVideo(indexVideo + 1);
-        setDataVideo(dataAll[indexVideo + 1]);
     };
 
     const handlePrevVideo = () => {
         setIndexVideo(indexVideo - 1);
-        setDataVideo(dataAll[indexVideo - 1]);
     };
 
     const handleFollow = () => {
-        followUser(dataVideo.user.id, token)
-        setFollowing(true);
-    };
-
-    const handleUnFollow = () => {
-        unfollowUser(dataVideo.user.id, token);
-        setFollowing(false);
-    };
-
-    const handleLikeVideo = ()=>{
         if(auth){
-            if(liked){
-                unLikeVideos(dataVideo.uuid,token)
-                setLiked(false)
-                setCountLike(countLike-1);
+            if(dataVideo.user.is_followed){
+                unfollowUser(dataVideo.user.id, token)
+                .then((res)=>{    
+                    updateUser(res.data,dataAllVideo);
+                    handleUpdateAccount(res.data,dataAccounts);
+
+                })
             }else{
-                likeVideos(dataVideo.uuid,token);
-                setLiked(true)
-                setCountLike(countLike+1);
+                followUser(dataVideo.user.id, token)
+                .then((res)=>{
+                    
+                    updateUser(res.data,dataAllVideo);
+                    handleUpdateAccount(res.data,dataAccounts);
+                })
             }
         }else{
             isShowingLogin();
         }
-    }
+    };
 
+   
+
+    const handleLikeVideo = () => {
+        if (auth) {
+            if (dataVideo.is_liked) {
+                unLikeVideos(dataVideo.uuid, token)
+                .then((res)=>{
+                    updateVideos(res.data.data,dataAllVideo)
+                })
+            } else {
+                likeVideos(dataVideo.uuid, token)
+                .then((res)=>{
+                    updateVideos(res.data.data,dataAllVideo)
+                })
+            }
+        } else {
+            isShowingLogin();
+        }
+    };
    
 
     return (
@@ -92,12 +172,13 @@ function ModeBrowser({ modalHide, data = [] }) {
                 <VideoMode
                     modalHide={modalHide}
                     data={dataVideo}
-                    dataAll={dataAll}
+                    dataAll={dataAllVideo}
                     indexVideo={indexVideo}
                     handleNext={handleNextVideo}
                     handlePrev={handlePrevVideo}
                     volumeModal={volumeModal}
                     setVolumeModal={setVolumeModal}
+                    typeModal = {typeModal}
                 />
             </div>
             <div className={cx('content-container')}>
@@ -113,7 +194,7 @@ function ModeBrowser({ modalHide, data = [] }) {
                         <div className={cx("btn-follow")}>
                             {
                                 auth ? (
-                                            following ? <Button onclick={handleUnFollow} outline>Đang Follow</Button>
+                                    dataVideo.user.is_followed ? <Button onclick={handleFollow} outline>Đang Follow</Button>
                                                     : <Button onclick={handleFollow} outlinePrimary>Follow</Button>
                                         )
                                     :(
@@ -136,11 +217,11 @@ function ModeBrowser({ modalHide, data = [] }) {
                             <div className={cx('like')}>
                                 <i onClick = {handleLikeVideo}>
                                     {
-                                        liked ? <LikeIconActive width='18' height='18' />
+                                        dataVideo.is_liked ? <LikeIconActive width='18' height='18' />
                                                 : <LikeIcon width='18' height='18' />
                                     }
                                 </i>
-                                <span className={cx('like-count')}>{countLike}</span>
+                                <span className={cx('like-count')}>{dataVideo.likes_count}</span>
                             </div>
                             <div className={cx('comment-icon')}>
                                 <i>

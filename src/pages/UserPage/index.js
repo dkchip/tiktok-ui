@@ -1,5 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import {useState, useEffect, useContext } from 'react';
+import classNames from 'classnames/bind';
+import { useSelector,useDispatch } from 'react-redux';
 
 import {
     LinkIcon,
@@ -14,16 +16,21 @@ import {
     TelegramIcon,
     FacebookIcon,
     LockIcon,
+    EditProfileIcon,
+    FollowedIcon
 } from '../../components/Icon';
-import classNames from 'classnames/bind';
+import { setVideosUser } from '../../store/slices/videosSlice';
 import styles from './UserPage.module.scss';
-import {getProfileUser} from "../../services/userServices"
+import {getProfileUser,followUser,unfollowUser} from "../../services/userServices"
 import Button from '../../components/Button';
 import Menu from '../../components/Popper/Menu';
-import { useState } from 'react';
 import ButtonBottom from '../../components/ButtonBottom/ButtonBottom';
 import VideosProfile from './VideosProfile';
 import LikedProfile from './LikedProfile';
+import { ModalContextKeys } from '../../contexts/ModalContext';
+import Cookies from 'js-cookie';
+import { setOtherUser } from '../../store/slices/userSlice';
+
 
 const cx = classNames.bind(styles);
 const MENU_SHARE = {
@@ -99,27 +106,64 @@ const MENU_REPORTS = [
     },
 ];
 function UserPage() {
+    const dispatch = useDispatch();
+    const auth = useSelector(state => state.user.auth)
+    const currentUser = useSelector(state => state.user.currentUser)
+    const {isShowingLogin} = useContext(ModalContextKeys)
+    const token = Cookies.get("tokenAuth")
+    const dataAllVideoUser = useSelector(state => state.videos.dataAllVideosUser);
 
-
-    const [data, setData] = useState(null);
     const [isActive, setIsActive] = useState('video');
     const user = useParams();
-    const fullName = data ? (`${(data.first_name ? data.first_name : "") + ' '+ (data.last_name ? data.last_name : '')}`) : null
-    
+    const data = useSelector((state) => state.user.otherUser)
+
+    const dataVideo = useSelector((state)=> state.videos.dataAllVideosUser);
 
     useEffect(() => {
-        getProfileUser(user.nickname)
+        getProfileUser(user.nickname,token)
             .then((res)=>{
-                setData(res.data)
+
+                dispatch(setVideosUser(res.data.videos))
+                dispatch(setOtherUser(res.data))
+                dispatch(setVideosUser(res.data.videos))
             })
     }, [user.nickname]);
+
+    const fullName = data ? (`${(data.first_name ? data.first_name : "") + ' '+ (data.last_name ? data.last_name : '')}`) : null
     
     document.title = data ? (`${fullName} (@${data.nickname}) | TikTok`) : "Tiktok - Make your day"
 
     const setActiveTab = (value) => {
         setIsActive(value);
     };
-    return data ? (
+
+    const updateUserVideo = (data,dataAll)=>{
+        const tempDataAllVideos = [...dataAll]
+        const newDataAllVideos = tempDataAllVideos.map((item)=>{
+            return {...item, user : data}
+        })
+        dispatch(setVideosUser(newDataAllVideos))
+    }
+
+    const handleUnfollow = ()=>{
+        unfollowUser(data.id,token)
+            .then((res)=>{
+                dispatch(setOtherUser(res.data))
+                updateUserVideo(res.data,dataAllVideoUser)
+            })
+    }
+
+    const handleFollow = ()=>{
+        followUser(data.id,token)
+        .then((res)=>{
+            dispatch(setOtherUser(res.data))
+            updateUserVideo(res.data,dataAllVideoUser)
+
+
+        })
+    }
+
+    return data  ? (
         <div className={cx('wraper')}>
             <div className={cx('header')}>
                 <div className={cx('info')}>
@@ -130,7 +174,31 @@ function UserPage() {
                                 {data.nickname} <Ticker />
                             </h2>
                             <h3 className={cx('full-name')}>{data.first_name + ' ' + data.last_name}</h3>
-                            <Button primary>Follow</Button>
+                            <div className={cx("btn")}>
+                                {
+                                    auth ? 
+                                    (
+                                        currentUser.id === data.id ? 
+                                        (
+                                            <Button  iconLeft={<EditProfileIcon />} outline>Sửa hồ sơ</Button>
+                                        ) : (
+                                            data.is_followed ? 
+                                            (
+                                                <>
+                                                    <Button outlinePrimary>Nhắn tin</Button>
+                                                    <button onClick={handleUnfollow} className={cx("btn-unfollow")}> 
+                                                        <FollowedIcon />
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <Button onclick={handleFollow} primary>Follow</Button>
+                                            )
+                                        )
+                                    ) : (
+                                        <Button onclick={isShowingLogin} primary>Follow</Button>
+                                    )
+                                }
+                            </div>
                         </div>
                     </div>
                     <h2 className={cx('count-info')}>
@@ -193,12 +261,13 @@ function UserPage() {
                     </div>
                     <div className={cx('scroll-tab', `${isActive === 'like' ? 'translate-x' : undefined}`)}></div>
                 </div>
+     
                 <div className={cx('video-wraper')}>
-                    <div className={cx('video-list')}>
-                        {isActive === "video" ? <VideosProfile data={data.videos}></VideosProfile> : ""}
+                    <div style={{width : "100%"}}>
+                        {isActive === "video" ? <VideosProfile data={dataVideo} id ={data.id}></VideosProfile> : ""}
                     </div>
                     <div>
-                        {isActive === "like" ? <LikedProfile data={data} /> : ""}
+                        {isActive === "like" ? <LikedProfile data={dataVideo} /> : ""}
                     </div>
                 </div>
             </div>
