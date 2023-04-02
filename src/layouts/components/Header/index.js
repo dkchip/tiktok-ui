@@ -36,11 +36,13 @@ const cx = classnames.bind(style);
 
 function Header({wider}) {
  const { isShowingModalLoad, isHideModalLoad } = useContext(ModalLoadingContextKeys);
+ const authData = useSelector((state)=>state.user);
+ 
  const userMenu = [
     {
         icon: <FontAwesomeIcon icon={faUser} />,
         title: 'Xem hồ sơ ',
-        path: '/profile',
+        path: `/@${authData.currentUser.nickname}`,
     },
     {
         icon: <FontAwesomeIcon icon={faCoins} />,
@@ -72,7 +74,6 @@ function Header({wider}) {
         separate: true,
     },
 ];
-    const authData = useSelector((state)=>state.user);
     const [visible,setVisible] = useState(false)
     const {isShowingLogin} = useContext(ModalContextKeys)
 
