@@ -15,8 +15,22 @@ function Login() {
     const { isShowingModalLoad, isHideModalLoad } = useContext(ModalLoadingContextKeys);
 
     const [show, setShow] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [account,setAccount] = useState({
+        email : "",
+        password : ""
+    })
+
+    const [booleanMessage,setBooleanMessage] = useState({
+        email : false,
+        password : false
+    })
+
+    const [booleanValue,setBooleanValue] = useState({
+        email : false,
+        password : false
+    });
+
+    const [errorLogin,setErrorLogin] = useState(false);
 
     const dispatch = useDispatch();
     const onChangeType = () => {
@@ -27,23 +41,96 @@ function Login() {
         history('/');
     };
 
+    
+    function ValidateEmail(value) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    const onChangeValue = (e)=>{
+        setAccount({
+            ...account,
+            [e.target.name] : e.target.value
+        })
+
+        handleCheckValue(e)
+        setErrorLogin(false);
+
+    }
+
+    const handleCheckValue = (e)=>{
+        switch(e.target.name){
+            case "email" :
+                if(ValidateEmail(e.target.value)){ 
+                    setBooleanMessage({
+                        ...booleanMessage,
+                        email : false
+                    })
+                    setBooleanValue({
+                        ...booleanValue,
+                        [e.target.name] : true
+                    })
+                }else{
+                    setBooleanMessage({
+                        ...booleanMessage,
+                        [e.target.name] : true
+                    })
+                    setBooleanValue({
+                        ...booleanValue,
+                        [e.target.name] : false
+                    })
+                }
+            break;
+            case "password" :
+                if(e.target.value.length > 5 ){
+                    setBooleanMessage({
+                        ...booleanMessage,
+                        [e.target.name] : false,
+                    })
+                    setBooleanValue({
+                        ...booleanValue,
+                        [e.target.name] : true
+                    })
+                }else{
+
+                    setBooleanMessage({
+                        ...booleanMessage,
+                        [e.target.name] : true
+                    })
+                    setBooleanValue({
+                        ...booleanValue,
+                        [e.target.name] : false
+                    })
+                }
+            break;
+           
+        }
+    }
+
+
     const handleLogin = (e) => {
         e.preventDefault();
-        isShowingModalLoad();
-        setTimeout(() => {
-            loginUser(email, password)
-                .then((res) => {
-                    dispatch(setUser(res.data));
-                    Cookies.remove('tokenAuth');
-                    Cookies.set('tokenAuth', res.meta.token);
-                    window.location.reload();
-                    goToHomePage();
-                    isHideModalLoad();
-                })
-                .catch((e) => {
-                    isShowingModalLoad();
-                });
-        }, 500);
+        if(booleanValue.email && booleanValue.password){
+            isShowingModalLoad();
+            setTimeout(() => {
+                loginUser(account.email, account.password)
+                    .then((res) => {
+                        dispatch(setUser(res.data));
+                        Cookies.remove('tokenAuth');
+                        Cookies.set('tokenAuth', res.meta.token);
+                        window.location.reload();
+                        goToHomePage();
+                        isHideModalLoad();
+                    })
+                    .catch((e) => {
+                        setErrorLogin(true);
+                        isHideModalLoad();
+                    });
+            }, 500);
+        }
     };
 
     return (
@@ -56,27 +143,42 @@ function Login() {
                     <div className={cx('content')}>
                         <div className={cx('account')}>
                             <input
+                                className={cx(`${booleanMessage.email ? "error-input" : null}`)}
                                 type="text"
+                                value={account.email}
                                 placeholder="Nhập email"
+                                name='email'
                                 onChange={(e) => {
-                                    setEmail(e.target.value);
+                                    onChangeValue(e)
                                 }}
                             />
+                            {booleanMessage.email && (
+                                <span className={cx('error-message')}>Tài khoản phải là email !</span>
+                            )}
                         </div>
                         <div className={cx('password')}>
                             <input
+                                className={cx(`${booleanMessage.password ? "error-input" : null}`)}
                                 type={!show ? 'password' : 'text'}
+                                value={account.password}
                                 placeholder="Mật khẩu"
+                                name='password'
                                 onChange={(e) => {
-                                    setPassword(e.target.value);
+                                    onChangeValue(e)
                                 }}
                             />
                             <i className={cx('showhide')} onClick={onChangeType}>
                                 {!show ? <EyeHideIcon /> : <EyeShowIcon />}
                             </i>
+                            {booleanMessage.password && (
+                                <span className={cx('error-message')}>Mật khẩu phải lớn hơn 5 kí tự</span>
+                            )}
                         </div>
                     </div>
                     <a className={cx('link')}>Quên mật khẩu?</a>
+                    {
+                        errorLogin ? <span className={cx("error-register")}>Tài khoản hoặc mật khẩu không chính xác</span> : null
+                    }
                 </div>
                 <div className={cx('submit')}>
                     <button

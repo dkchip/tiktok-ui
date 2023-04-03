@@ -116,16 +116,18 @@ function UserPage() {
     const [isActive, setIsActive] = useState('video');
     const user = useParams();
     const data = useSelector((state) => state.user.otherUser)
-
     const dataVideo = useSelector((state)=> state.videos.dataAllVideosUser);
 
+    const [loading,setLoading] = useState(false);
+
     useEffect(() => {
+        setLoading(false)
         getProfileUser(user.nickname,token)
             .then((res)=>{
-
                 dispatch(setVideosUser(res.data.videos))
                 dispatch(setOtherUser(res.data))
                 dispatch(setVideosUser(res.data.videos))
+                setLoading(true)
             })
     }, [user.nickname]);
 
@@ -163,7 +165,7 @@ function UserPage() {
         })
     }
 
-    return data  ? (
+    return loading && data  ? (
         <div className={cx('wraper')}>
             <div className={cx('header')}>
                 <div className={cx('info')}>

@@ -24,11 +24,12 @@ import Tippy from '@tippyjs/react';
 import { useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 import { followUser,unfollowUser } from '../../services/userServices';
-import { likeVideos,unLikeVideos } from '../../services/videoService';
+import { likeVideos,unLikeVideos,getComments,createComment } from '../../services/videoService';
 import { ModalContextKeys } from '../../contexts/ModalContext';
 import { updateVideo ,updateVideoFollowing,setVideosUser} from '../../store/slices/videosSlice';
 import { updateAccount } from '../../store/slices/accountSlice';
 import { setOtherUser } from '../../store/slices/userSlice';
+import {updateCommnets, setCommnets} from "../../store/slices/commentsSlice"
 
 const cx = classNames.bind(styles);
 function ModeBrowser({ modalHide, data = [] }) {
@@ -38,9 +39,10 @@ function ModeBrowser({ modalHide, data = [] }) {
     const dispatch = useDispatch();
 
     const [ indexVideo, setIndexVideo,typeModal] = data;
+    const [loadingComments,setLoadingCommnets] = useState(false);
+    const [valueComments,setValueComments] = useState("")
 
-
-
+    const dataComments = useSelector(state => state.comments.dataComments);
     const dataAllVideo = useSelector((state)=>{
         if(typeModal === "home"){
             return state.videos.dataAllVideos
@@ -57,8 +59,20 @@ function ModeBrowser({ modalHide, data = [] }) {
 
     const dataVideo = dataAllVideo[indexVideo];
     const [volumeModal, setVolumeModal] = useState('0.5');
-    const [dataComments, setDataComments] = useState({});
 
+
+
+    //Get comments
+    useEffect(() => {
+        if(auth){
+            setLoadingCommnets(false);
+            const uuid = dataAllVideo[indexVideo].uuid;
+            getComments(uuid, 'comments',token).then((res) => {
+                dispatch(updateCommnets(res.data.data))
+                setLoadingCommnets(true)
+            });
+        }
+    }, [indexVideo]);
 
     const updateVideos = (data,dataAllVideos) => {
 
@@ -108,12 +122,7 @@ function ModeBrowser({ modalHide, data = [] }) {
         dispatch(updateAccount(newDataAccounts));
     }
 
-    useEffect(() => {
-        // const uuid = data[0].uuid;
-        // getComments(uuid, 'comments').then((res) => {
-        //     setDataComments(res.data.data);
-        // });
-    }, [data[0]]);
+
 
     const handleNextVideo = () => {
         setIndexVideo(indexVideo + 1);
@@ -161,10 +170,33 @@ function ModeBrowser({ modalHide, data = [] }) {
                 })
             }
         } else {
-            isShowingLogin();
+            isShowingLogin()
         }
     };
-   
+
+    const onChangeValue = (e)=>{
+        if(!e.startsWith(" ",0)){
+            setValueComments(e)
+        }
+    }
+
+    const handleCreateComment = ()=>{
+        const uuid = dataAllVideo[indexVideo].uuid;
+
+        createComment(uuid,"comments",token,valueComments)
+        .then((res)=>{
+             setValueComments("")
+            const time = setTimeout(()=>{
+                dispatch(setCommnets(res.data.data))
+            },500)
+            return ()=>{
+                clearTimeout(time)
+            }
+        })
+    }
+
+
+ 
 
     return (
         <div className={cx('container')}>
@@ -268,45 +300,77 @@ function ModeBrowser({ modalHide, data = [] }) {
 
                 <div className={cx('comment')}>
                     <div className={cx('comment-list')}>
-                        {dataComments.length > 0 ? dataComments.map((item, index) => {
-                            return (
-                                <div className={cx('comment-item')}>
-                                    <img
-                                        className={cx('user-avatar')}
-                                        src={item.user.avatar}
-                                        alt=""
-                                    />
-                                    <div className={cx('comment-content')}>
-                                        <h3 className={cx('full-name-comment')}>{item.user.nickname}</h3>
-                                        <span className={cx('comment-text')}>{item.comment}</span>
-                                        <div className={cx('comment-sub-content')}>
-                                            <span className={cx('comment-time')}>Time</span>
-                                            <span className={cx('comment-reply')}>Trả lời</span>
-                                        </div>
-                                    </div>
-                                    <div className={cx('comment-like')}>
-                                        <i className={cx('like-icon')}>
-                                            <LikeCommentIcon />
-                                        </i>
-                                    </div>
-                                </div>
+                        {
+                            auth ? 
+                            (
+                                loadingComments && (
+
+                                    dataComments.length > 0 ? 
+                                        dataComments.map((item, index) => {
+                                            return (
+                                                <div key={index} className={cx('comment-item')}>
+                                                    <img
+                                                        className={cx('user-avatar')}
+                                                        src={item.user.avatar}
+                                                        alt=""
+                                                    />
+                                                    <div className={cx('comment-content')}>
+                                                        <h3 className={cx('full-name-comment')}>{item.user.nickname}</h3>
+                                                        <span className={cx('comment-text')}>{item.comment}</span>
+                                                        <div className={cx('comment-sub-content')}>
+                                                            <span className={cx('comment-time')}>Time</span>
+                                                            <span className={cx('comment-reply')}>Trả lời</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className={cx('comment-like')}>
+                                                        <i className={cx('like-icon')}>
+                                                            <LikeCommentIcon />
+                                                        </i>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    ):
+                                        <span className={cx("no-comment")}>Hãy là người đầu tiên bình luận</span>
+                                    )
+                                
+                            ):
+                            (
+                                <span className={cx("no-comment")}>Đăng nhập để xem bình luận</span>
                             )
-                        }) :
-                            <span className={cx("no-comment")}>Hãy là người đầu tiên bình luận</span>
                         }
+                        
                     </div>
                 </div>
                 <div className={cx('comment-inpput-container')}>
                     <div className={cx('comment-input-wrapper')}>
-                        {/* <button className={cx('comment-login')}>Please log in to comment</button> */}
-                        <div className={cx('comment-input')}>
-                            <input type="text"></input>
-                            <i className={cx('emoji-icon')}>
-                                <EmojiIcon />
-                            </i>
-                        </div>
+                        {
+                            auth ? (
+                                <div className={cx('comment-input')}>
+                                    <input 
+                                        type="text"
+                                        value={valueComments}
+                                        onChange={(e)=>{
+                                            onChangeValue(e.target.value)
+                                        }}
+                                        onKeyDown={(e)=>{
+                                            if(e.keyCode === 13){
+                                                handleCreateComment();
+                                            }
+                                            } 
+                                        }
+                                    />
+                                    <i className={cx('emoji-icon')}>
+                                        <EmojiIcon />
+                                    </i>
+                                </div>
+                            ):(
+                                <button className={cx('comment-login')} onClick={isShowingLogin}>Please log in to comment</button> 
+                            )
+                        }
+                        
                     </div>
-                    <button className={cx('submit-comment')}>Đăng</button>
+                    {auth && <button className={cx('submit-comment')} onClick={handleCreateComment}>Đăng</button>}
                 </div>
             </div>
         </div>

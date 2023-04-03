@@ -1,11 +1,11 @@
 import request from '../utils/request';
 
-export const getComments = async (key, comments = 'comments') => {
+export const getComments = async (key, comments = 'comments',token) => {
     try {
         const res = await request.get(`videos/${key}/${comments}`, {
             headers: { 
                 'Content-Type': 'application/json' ,
-                Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC90aWt0b2suZnVsbHN0YWNrLmVkdS52blwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTY3NzQzMzY5MiwiZXhwIjoxNjgwMDI1NjkyLCJuYmYiOjE2Nzc0MzM2OTIsImp0aSI6Ijk4dUw5cWJmRDdXVTlLVnoiLCJzdWIiOjUxODQsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.gEtKvtP6CB5TsPrXwT0F-wA29pmt44DIocuGW86KAB4`,
+                Authorization: `Bearer ${token}`,
             },
         });
 
@@ -14,6 +14,25 @@ export const getComments = async (key, comments = 'comments') => {
         console.log(e);
     }
 };
+
+export const createComment = async (key, comments = 'comments',token,value)=>{
+    try {
+        const res = await request.post(`videos/${key}/${comments}`,
+        { 
+            comment : value,
+        }, 
+        {
+            headers: { 
+                'Content-Type': 'application/json' ,
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return res;
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 export const getVideos = async (page,type)=>{
     try{
