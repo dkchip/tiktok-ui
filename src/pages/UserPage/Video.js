@@ -9,15 +9,16 @@ import { PlayOutlineIcon } from '../../components/Icon';
 import { ModalContextKeys } from '../../contexts/ModalContext';
 const cx = classNames.bind(styles);
 
-function Video({data}) {
+function Video({data,indexItem}) {
     const [videoPlaying,setVideoPlaying] = useState(false);
     const videoRef = useRef()
-    const {isShowingModalVideo,setTypeModal} = useContext(ModalContextKeys);
+    const {isShowingModalVideo,setTypeModal,setIndexVideo} = useContext(ModalContextKeys);
 
-
+    
     const handleClick = ()=>{
         isShowingModalVideo();
         setTypeModal("user");
+        setIndexVideo(indexItem);
     }
 
     const handlePlay = ()=>{

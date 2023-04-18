@@ -4,7 +4,8 @@ import VideoMode from './Video/VideoMode';
 import Button from '../Button';
 import { useEffect, useState,useContext } from 'react';
 import { useDispatch } from 'react-redux';
-
+import  Tippy from '@tippyjs/react/headless';
+import EmojiPicker from 'emoji-picker-react';
 
 import {
     MusicIcon,
@@ -18,13 +19,15 @@ import {
     ShareIcon,
     EmojiIcon,
     LikeCommentIcon,
+    MenuIcon,
+    DeleteIcon
     // LikeCommentActiveIcon,
 } from '../Icon';
-import Tippy from '@tippyjs/react';
+
 import { useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 import { followUser,unfollowUser } from '../../services/userServices';
-import { likeVideos,unLikeVideos,getComments,createComment } from '../../services/videoService';
+import { likeVideos,unLikeVideos,getComments,createComment,deleteComment } from '../../services/videoService';
 import { ModalContextKeys } from '../../contexts/ModalContext';
 import { updateVideo ,updateVideoFollowing,setVideosUser} from '../../store/slices/videosSlice';
 import { updateAccount } from '../../store/slices/accountSlice';
@@ -34,6 +37,7 @@ import {updateCommnets, setCommnets} from "../../store/slices/commentsSlice"
 const cx = classNames.bind(styles);
 function ModeBrowser({ modalHide, data = [] }) {
     const {auth} = useSelector((state)=>state.user);
+    const {currentUser} = useSelector(state => state.user)
     const token = Cookies.get("tokenAuth")
     const {isShowingLogin} = useContext(ModalContextKeys);
     const dispatch = useDispatch();
@@ -180,6 +184,17 @@ function ModeBrowser({ modalHide, data = [] }) {
         }
     }
 
+    const handleUpadteComment = (id,dataAll)=>{
+        const tempDataAll = [...dataAll];
+        const findIndex = tempDataAll.findIndex((item)=>{
+            return item.id ===id;
+        })
+        tempDataAll.splice(findIndex,1);
+        dispatch(updateCommnets(tempDataAll));
+
+    }
+   
+
     const handleCreateComment = ()=>{
         const uuid = dataAllVideo[indexVideo].uuid;
 
@@ -195,8 +210,14 @@ function ModeBrowser({ modalHide, data = [] }) {
         })
     }
 
+    const handleDeleteComment = (id,token,comment)=>{
+        deleteComment(id,token,comment)
+        .then((res)=>{
+            handleUpadteComment(id,dataComments);
+        })
+    } 
 
- 
+
 
     return (
         <div className={cx('container')}>
@@ -323,7 +344,30 @@ function ModeBrowser({ modalHide, data = [] }) {
                                                         </div>
                                                     </div>
                                                     <div className={cx('comment-like')}>
-                                                        <i className={cx('like-icon')}>
+                                                        {
+                                                            item.user.id === currentUser.id ? (
+                                                                <>
+                                                                    <Tippy
+                                                                    delay={[0,500]}
+                                                                    interactive = {true}
+                                                                    placement='bottom-end'
+                                                                    render={attrs =>(
+                                                                        <div className={cx("delete-btn")} {...attrs} tabIndex="-1" onClick={()=>{handleDeleteComment(item.id,token,item.comment)}}>
+                                                                            <DeleteIcon />
+                                                                            <span>Xóa</span>
+                                                                        </div>
+                                                                    )}
+                                                                >
+                                                                    <i className={cx("delete-icon")}>
+                                                                        <MenuIcon />
+                                                                    </i>
+                                                                </Tippy>
+                                                                </>
+                                                            ) : (
+                                                                null
+                                                            )
+                                                        }
+                                                        <i className={cx('like-icon',`${item.user.id !== currentUser.id ? "mgt-20" : null}`)}>
                                                             <LikeCommentIcon />
                                                         </i>
                                                     </div>
@@ -354,7 +398,7 @@ function ModeBrowser({ modalHide, data = [] }) {
                                             onChangeValue(e.target.value)
                                         }}
                                         onKeyDown={(e)=>{
-                                            if(e.keyCode === 13){
+                                            if(e.keyCode === 13 && valueComments.length > 0){
                                                 handleCreateComment();
                                             }
                                             } 
@@ -362,6 +406,7 @@ function ModeBrowser({ modalHide, data = [] }) {
                                     />
                                     <i className={cx('emoji-icon')}>
                                         <EmojiIcon />
+                                        {/* <EmojiPicker></EmojiPicker> */}
                                     </i>
                                 </div>
                             ):(
@@ -370,7 +415,15 @@ function ModeBrowser({ modalHide, data = [] }) {
                         }
                         
                     </div>
-                    {auth && <button className={cx('submit-comment')} onClick={handleCreateComment}>Đăng</button>}
+
+                    {auth && (
+                        valueComments.length > 0 ? 
+                        (
+                            <button className={cx('submit-comment',"primary-color")} onClick={handleCreateComment}>Đăng</button>
+                        ) :(
+                            <button className={cx('submit-comment')} style={{cursor : "inherit"}} disabled >Đăng</button>
+                        )
+                    )}
                 </div>
             </div>
         </div>

@@ -5,6 +5,8 @@ import Following from '../pages/Following';
 import routesConfig from '../config/routes';
 import Mainlayout from '../layouts/Mainlayout';
 import UserLayout from '../layouts/UserlLayout';
+import UpLoad from '../pages/UpLoad/UpLoad';
+import UpLoadLayout from '../layouts/UpLoadPage/UpLoadLayout';
 const publicRoutes = [
     {
         path: routesConfig.home,
@@ -25,7 +27,13 @@ const publicRoutes = [
         path: routesConfig.following,
         component: Following,
         layout: Mainlayout,
+    },
+    {
+        path :routesConfig.upload,
+        component :UpLoad,
+        layout : UpLoadLayout,
     }
+
 ];
 
 const privateRoutes = [];

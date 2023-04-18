@@ -20,9 +20,9 @@ function VideosProfile({ data ,id }) {
                 (   
                     <div className={cx('video-list')}>
                         {
-                            data.map((item) => {
+                            data.map((item,index) => {
                                 return (
-                                <Video key={item.id} data={item}></Video>
+                                <Video key={item.id}  data={item} indexItem={index}></Video>
                                 );
                             })
                         }
@@ -43,9 +43,9 @@ function VideosProfile({ data ,id }) {
                 (
                     <div className={cx('video-list')}>
                         {
-                            data.map((item) => {
+                            data.map((item,index) => {
                                 return (
-                                <Video key={item.id} data={item}></Video>
+                                <Video key={item.id}  data={item} indexItem={index}></Video>
                                 );
                             })
                         }
@@ -67,9 +67,9 @@ function VideosProfile({ data ,id }) {
             data.length > 0 ? (
                 <div className={cx('video-list')}>
                     {
-                        data.map((item) => {
+                        data.map((item,index) => {
                             return (
-                            <Video key={item.id} data={item}></Video>
+                            <Video key={item.id}  data={item} indexItem={index}></Video>
                             );
                         })
                     }

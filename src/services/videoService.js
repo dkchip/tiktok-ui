@@ -34,6 +34,26 @@ export const createComment = async (key, comments = 'comments',token,value)=>{
     }
 }
 
+
+export const deleteComment = async (key,token,comment)=>{
+    try {
+        const res = await request.delete(`comments/${key}`,
+        {
+            headers: { 
+                'Content-Type': 'application/json' ,
+                Authorization: `Bearer ${token}`,
+            },
+            params :{
+                comment : comment
+            }
+        });
+
+        return res;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export const getVideos = async (page,type)=>{
     try{
         const res = await request.get("videos",{
