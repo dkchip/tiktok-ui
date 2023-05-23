@@ -1,8 +1,8 @@
 import useModal from '../hooks/useModal';
-import Modal from '../components/Modal/Modal';
+import Modal from '../components/Modal/ModalLogin/Modal';
 import { ModeBrowser } from '../components/ModeBrowser';
 import { createContext, useRef, useState } from 'react';
-import ModalLoading from '../components/ModalLoading/ModalLoading';
+
 
 export const ModalContextKeys = createContext();
 

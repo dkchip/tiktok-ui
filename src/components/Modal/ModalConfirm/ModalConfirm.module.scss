@@ -1,0 +1,43 @@
+.wrapper{
+    position: fixed;
+    inset: 0;
+    background-color:rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999999;
+}
+
+.content{
+    width: 400px;
+    height: auto;
+    background-color: var(--white);
+    border-radius: 10px;
+    padding: 20px;
+
+}
+
+.heading{
+    text-align: center;
+
+    & span{
+        font-size: 1.4rem;
+        color:rgba(22, 24, 35, 0.75);
+    }
+}
+
+.btn-container{
+    margin-top: 10px;
+
+    & button{
+        width: 100%;
+        margin-top: 10px;
+        padding: 12px 0;
+    }
+
+    
+    & button:last-child{
+       margin-left: 0;
+       display: block;
+    }
+}

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 
 function useModal(ModalComponent){
     const [isShowing,setIsShowing] = useState(false)
+    const [confirm,setConfirm] = useState(false)
     const modalShowing = ()=>{
         setIsShowing(true)
     }
@@ -11,11 +12,17 @@ function useModal(ModalComponent){
         setIsShowing(false);
     }
 
+    const handleConfirm = () => {
+        setConfirm(!confirm);
+        modalHide()
+        
+    }
+
     const ModalExport = ({data})=>{
-        return isShowing && createPortal(<ModalComponent data = {data}  modalHide = {modalHide} />,document.body)
+        return isShowing && createPortal(<ModalComponent data = {data}  modalHide = {modalHide} handleConfirm = {handleConfirm}/>,document.body)
     }
     
-    return  [ModalExport,modalShowing,isShowing,modalHide]
+    return  [ModalExport,modalShowing,isShowing,modalHide,confirm]
        
     
 }

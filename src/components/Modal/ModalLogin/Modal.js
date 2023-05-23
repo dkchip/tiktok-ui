@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Modal.module.scss';
 
-import { MENU_LOGIN, MENU_REGISTER } from '../../data/dataModal';
-import { CloseIcon, ArrowLeftIcon,ArrowDownIcon } from '../Icon';
-import Button from '../Button';
+import { MENU_LOGIN, MENU_REGISTER } from '../../../data/dataModal';
+import { CloseIcon, ArrowLeftIcon,ArrowDownIcon } from '../../Icon';
+import Button from '../../Button';
 
 const cx = classNames.bind(styles);
 

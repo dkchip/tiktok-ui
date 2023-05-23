@@ -1,8 +1,8 @@
 import classNames from 'classnames/bind';
 import styles from './TypeModal.module.scss';
-import Image from '../../../components/Image';
-import images from '../../../asset/img';
-import { AddUserIcon, ScanIcon } from '../../Icon';
+import Image from '../../../Image';
+import images from '../../../../asset/img';
+import { AddUserIcon, ScanIcon } from'../../../Icon'
 const cx = classNames.bind(styles);
 function Qrcode() {
     return (

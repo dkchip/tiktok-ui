@@ -1,13 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from './TypeModal.module.scss';
-import { EyeHideIcon, EyeShowIcon } from '../../Icon';
+import { EyeHideIcon, EyeShowIcon } from '../../../Icon';
 import { useState, useContext } from 'react';
-import { loginUser } from '../../../services/userServices';
+import { loginUser } from '../../../../services/userServices';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../../store/slices/userSlice';
-import { ModalLoadingContextKeys } from '../../../contexts/ModalLoadingContext';
+import { setUser } from '../../../../store/slices/userSlice';
+import { ModalLoadingContextKeys } from '../../../../contexts/ModalLoadingContext';
 
 const cx = classNames.bind(styles);
 function Login() {

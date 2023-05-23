@@ -1,6 +1,6 @@
-import QrCode from "../components/Modal/TypeModal/Qrcode";
-import Login from "../components/Modal/TypeModal/Login";
-import Register from "../components/Modal/TypeModal/Register";
+import QrCode from "../components/Modal/ModalLogin/TypeModal/Qrcode";
+import Login from "../components/Modal/ModalLogin/TypeModal/Login";
+import Register from "../components/Modal/ModalLogin/TypeModal/Register";
 import {
     QrIcon,
     UserIcon,

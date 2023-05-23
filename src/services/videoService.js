@@ -128,4 +128,23 @@ export const unLikeVideos = async (idVideo,token)=>{
     }
 }
 
+export const postVideo = async (token,formData) => {
+    try{
+        const res = await request.post(`videos`,
+            formData
+        ,{
+            headers :{
+                Authorization : `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            },
+            
+            
+        })
+
+    return res;
+    }catch(e){
+        console.log(e)
+    }
+}
+
 

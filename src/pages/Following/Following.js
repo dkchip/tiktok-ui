@@ -13,15 +13,12 @@ import { useEffect, useState } from 'react';
 import { getSuggestedUsers } from '../../services/userServices';
 import CardPlayerItem from './CardPlayerItem';
 import VideoItem from '../../components/VideoItem/VideoItem';
-import { getVideosAuth } from '../../services/videoService'  ;
-
+import { getVideosAuth } from '../../services/videoService';
 
 
 
 
 const cx = classNames.bind(styles);
-
-const abc = "a";
 function Following() {
     document.title = 'Tiktok - Make your day';
     const dispatch = useDispatch();

@@ -100,7 +100,7 @@ function Header({wider}) {
                 <div className={cx('section')}>
                     {authData.auth ? (
                            <>
-                                <Button outline   iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button> 
+                                <Button outline to={"/upload" } onclick={()=>{}} iconLeft={<FontAwesomeIcon icon={faPlus}/>} >Tải lên</Button> 
                                 <Tippy content='Tin nhắn' placement='bottom' >
                                     <button className={cx('section-btn')}>
                                         <MessageIcon />
@@ -139,7 +139,6 @@ function Header({wider}) {
                                 
                             )
                         }
-                                
                     </Menu>
                 </div>
             </div>  

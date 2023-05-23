@@ -86,7 +86,7 @@
     align-items: center;
     position: relative;
     cursor: pointer;
-    width: 300px;
+    width: 250px;
     & input{
         cursor: pointer;
         width: 100%;
@@ -96,10 +96,12 @@
     &::after{
         position: absolute;
         content: "";
-        width: 100%;
+        width: 96%;
         height: 2px;
-        background-color: rgba(84, 84, 84, 0.5);
+        // background-color: rgba(84, 84, 84, 0.5);
+        background-color: white;
         z-index: -33;
+        left: 4px;
     }
 }
 

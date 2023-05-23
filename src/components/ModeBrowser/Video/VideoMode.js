@@ -85,6 +85,7 @@ function VideoMode({ modalHide, data, dataAll, indexVideo, handleNext, handlePre
                     loop
                     onProgress={(e) => {
                         onDurationUpdate(e.target.duration);
+
                     }}
                     onTimeUpdate={(e) => {
                         onTimeUpdate(e.currentTarget.currentTime);
@@ -110,7 +111,7 @@ function VideoMode({ modalHide, data, dataAll, indexVideo, handleNext, handlePre
 
             <div className={cx('process-wrapper')}>
                 <div className={cx('process-video')}>
-                    <div className={cx('process-btn')} style={{ left: `${progress - 3}%` }}></div>
+                    <div className={cx('process-btn')} style={{ left: `${progress }%`,transform:`translateX(-${progress}%)` }}></div>
                     <div className={cx('process-bar')} style={{ width: `${progress}%` }}></div>
 
                     <input
@@ -125,7 +126,7 @@ function VideoMode({ modalHide, data, dataAll, indexVideo, handleNext, handlePre
                     />
                 </div>
                 <div className={cx('time-video')}>
-                    {timeUpdate}:{duration}
+                    {timeUpdate}/{duration}
                 </div>
             </div>
             <div className={cx('controls-volume')}>
