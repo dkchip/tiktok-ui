@@ -5,7 +5,7 @@ import Button from '../Button';
 import { useEffect, useState,useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import  Tippy from '@tippyjs/react/headless';
-import EmojiPicker from 'emoji-picker-react';
+
 
 import {
     MusicIcon,
@@ -20,19 +20,21 @@ import {
     EmojiIcon,
     LikeCommentIcon,
     MenuIcon,
-    DeleteIcon
-    // LikeCommentActiveIcon,
+    DeleteIcon,
+
 } from '../Icon';
 
 import { useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 import { followUser,unfollowUser } from '../../services/userServices';
-import { likeVideos,unLikeVideos,getComments,createComment,deleteComment } from '../../services/videoService';
+import { likeVideos,unLikeVideos,getComments,createComment,deleteComment,deleteVideo } from '../../services/videoService';
 import { ModalContextKeys } from '../../contexts/ModalContext';
 import { updateVideo ,updateVideoFollowing,setVideosUser} from '../../store/slices/videosSlice';
 import { updateAccount } from '../../store/slices/accountSlice';
 import { setOtherUser } from '../../store/slices/userSlice';
 import {updateCommnets, setCommnets} from "../../store/slices/commentsSlice"
+import { ModalLoadingContextKeys } from '../../contexts/ModalLoadingContext';
+
 
 const cx = classNames.bind(styles);
 function ModeBrowser({ modalHide, data = [] }) {
@@ -40,6 +42,7 @@ function ModeBrowser({ modalHide, data = [] }) {
     const {currentUser} = useSelector(state => state.user)
     const token = Cookies.get("tokenAuth")
     const {isShowingLogin} = useContext(ModalContextKeys);
+    const {handleToastShowing,handleShowingModalDelete,deleteVideoValue} = useContext(ModalLoadingContextKeys)
     const dispatch = useDispatch();
 
     const [ indexVideo, setIndexVideo,typeModal] = data;
@@ -76,7 +79,17 @@ function ModeBrowser({ modalHide, data = [] }) {
                 setLoadingCommnets(true)
             });
         }
+
+        window.history.replaceState({},"", `/@${dataVideo.user.nickname}/video/${dataVideo.uuid}`);
+        // eslint-disable-next-line
     }, [indexVideo]);
+
+    //Delete video
+    useEffect(() => {
+        if(deleteVideoValue){
+            handleDeleteVideo(token,dataVideo.uuid)
+        }
+    },[deleteVideoValue])
 
     const updateVideos = (data,dataAllVideos) => {
 
@@ -202,9 +215,10 @@ function ModeBrowser({ modalHide, data = [] }) {
         .then((res)=>{
              setValueComments("")
             const time = setTimeout(()=>{
+                handleToastShowing("Comment posted")
                 dispatch(setCommnets(res.data.data))
             },500)
-            return ()=>{
+            return () => {
                 clearTimeout(time)
             }
         })
@@ -212,12 +226,32 @@ function ModeBrowser({ modalHide, data = [] }) {
 
     const handleDeleteComment = (id,token,comment)=>{
         deleteComment(id,token,comment)
-        .then((res)=>{
+        .then(()=>{
+            handleToastShowing("Deleted comment")
             handleUpadteComment(id,dataComments);
         })
     } 
 
-
+    const handleDeleteVideo = (token,uuid) => {
+        deleteVideo(token,uuid)
+            .then(() => {
+                handleToastShowing("Deleted video");
+                return new Promise((resolve,reject) => {
+                    setTimeout(() => {
+                        resolve(() => {
+                            if(typeModal === "user"){
+                                window.location = `/@${currentUser.nickname}`;
+                            }else{
+                                window.location.reload();
+                            }
+                        })
+                    },500)
+                })
+            })
+            .then((callback) => {
+                callback();
+            })
+    }
 
     return (
         <div className={cx('container')}>
@@ -234,6 +268,9 @@ function ModeBrowser({ modalHide, data = [] }) {
                     typeModal = {typeModal}
                 />
             </div>
+
+            {/* Content right */}
+
             <div className={cx('content-container')}>
                 <div className={cx('header')}>
                     <div className={cx('info-user')}>
@@ -246,9 +283,38 @@ function ModeBrowser({ modalHide, data = [] }) {
                         </div>
                         <div className={cx("btn-follow")}>
                             {
-                                auth ? (
-                                    dataVideo.user.is_followed ? <Button onclick={handleFollow} outline>Đang Follow</Button>
-                                                    : <Button onclick={handleFollow} outlinePrimary>Follow</Button>
+                                auth ? (  
+                                            currentUser.id === dataVideo.user.id ? (
+                                                typeModal === "user" ? (
+                                                    <div className={cx("action-icon")}>
+                                                        <Tippy
+                                                            delay={[0,500]}
+                                                            interactive = {true}
+                                                            placement='bottom-end'
+                                                            render={attrs =>(
+                                                                <div className={cx("delete-btn")} {...attrs} tabIndex="-1" onClick={() => {handleShowingModalDelete()}} >
+                                                                    <DeleteIcon />
+                                                                    <span>Xóa video</span>
+                                                                </div>
+                                                            )}
+                                                        >
+                                                            <i >
+                                                                <MenuIcon />
+                                                            </i>
+                                                        </Tippy>
+                                                        
+                                                    </div>
+                                                ) : (
+                                                    null
+                                                )
+                                            ) : (
+                                                dataVideo.user.is_followed ? (
+                                                    <Button onclick={handleFollow} outline>Đang Follow</Button>
+                                                ) : (
+                                                    <Button onclick={handleFollow} outlinePrimary>Follow</Button>
+                                                    ) 
+                                    
+                                            )
                                         )
                                     :(
                                         <Button onclick={isShowingLogin} outlinePrimary>Follow</Button>
@@ -325,8 +391,7 @@ function ModeBrowser({ modalHide, data = [] }) {
                             auth ? 
                             (
                                 loadingComments && (
-
-                                    dataComments.length > 0 ? 
+                                    dataComments.length > 0 ?(
                                         dataComments.map((item, index) => {
                                             return (
                                                 <div key={index} className={cx('comment-item')}>
@@ -348,20 +413,20 @@ function ModeBrowser({ modalHide, data = [] }) {
                                                             item.user.id === currentUser.id ? (
                                                                 <>
                                                                     <Tippy
-                                                                    delay={[0,500]}
-                                                                    interactive = {true}
-                                                                    placement='bottom-end'
-                                                                    render={attrs =>(
-                                                                        <div className={cx("delete-btn")} {...attrs} tabIndex="-1" onClick={()=>{handleDeleteComment(item.id,token,item.comment)}}>
-                                                                            <DeleteIcon />
-                                                                            <span>Xóa</span>
-                                                                        </div>
-                                                                    )}
-                                                                >
-                                                                    <i className={cx("delete-icon")}>
-                                                                        <MenuIcon />
-                                                                    </i>
-                                                                </Tippy>
+                                                                        delay={[0,500]}
+                                                                        interactive = {true}
+                                                                        placement='bottom-end'
+                                                                        render={attrs =>(
+                                                                            <div className={cx("delete-btn")} {...attrs} tabIndex="-1" onClick={()=>{handleDeleteComment(item.id,token,item.comment)}}>
+                                                                                <DeleteIcon />
+                                                                                <span>Xóa</span>
+                                                                            </div>
+                                                                        )}
+                                                                    >
+                                                                        <i className={cx("delete-icon")}>
+                                                                            <MenuIcon />
+                                                                        </i>
+                                                                    </Tippy>
                                                                 </>
                                                             ) : (
                                                                 null
@@ -374,9 +439,11 @@ function ModeBrowser({ modalHide, data = [] }) {
                                                 </div>
                                             )
                                         }
-                                    ):
+                                        )
+                                    ):(
                                         <span className={cx("no-comment")}>Hãy là người đầu tiên bình luận</span>
                                     )
+                                )
                                 
                             ):
                             (

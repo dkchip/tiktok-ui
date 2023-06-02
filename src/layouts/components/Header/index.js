@@ -35,7 +35,9 @@ const cx = classnames.bind(style);
 
 
 function Header({wider}) {
+        
  const { isShowingModalLoad, isHideModalLoad } = useContext(ModalLoadingContextKeys);
+
  const authData = useSelector((state)=>state.user);
  
  const userMenu = [
@@ -87,9 +89,9 @@ function Header({wider}) {
 
 
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} >
             <div className={cx('inner')} style = {{width : wider ? '100%' : '1150px'}}>
-                <div className={cx('logo')}>
+                <div className={cx('logo')}  >
                     <Link className={cx('logo-link')} to={routesConfig.home} onClick="refresh">
                         <img src={images.logo} alt="logo tiktok"></img>
                     </Link>
@@ -127,10 +129,12 @@ function Header({wider}) {
                         {
                             authData.auth ?(
 
-                                <Image 
-                                alt ='AVT'
-                                className={cx('menu-user-avt')} 
-                                src={authData.currentUser.avatar} />
+                              <div className={cx("img-avatar")}>
+                                    <Image 
+                                        alt ='AVT'
+                                        src={authData.currentUser.avatar} 
+                                    />
+                              </div>
                             ):(
                                 
                                 <button>

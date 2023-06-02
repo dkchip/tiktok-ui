@@ -14,7 +14,7 @@ import { postVideo } from '../../services/videoService';
 const cx = classNames.bind(styles);
 
 function UpLoad() {
-    const {discardModalShowing,confirm,confirmModalShowing,confirmValue,successModalShowing} = useContext(ModalLoadingContextKeys);
+    const {discardModalShowing,confirmDiscard,confirmModalShowing,confirmValue,successModalShowing} = useContext(ModalLoadingContextKeys);
 
     const authData = useSelector((state) => state.user);
     const videoRef = useRef();
@@ -54,10 +54,10 @@ function UpLoad() {
 
 
     useEffect(()=>{
-        if(videoRef.current){
+        if(videoRef.current && (confirmValue || confirmDiscard)){
             resetValue()
         }
-    },[confirm,confirmValue])
+    },[confirmValue,confirmDiscard])
 
 
     const handleProgress = (e) => {
@@ -97,16 +97,16 @@ function UpLoad() {
         setIsLoading(true);
 
         postVideo(token, formData)
-        .then((res) => {
-            setIsLoading(false)
-            resetValue();
-            successModalShowing();
-            console.log(res)
-        })
-        .catch((e) => {
-            setIsLoading(false)
-            console.log(e);
-        });
+            .then((res) => {
+                setIsLoading(false)
+                resetValue();
+                successModalShowing();
+                console.log(res)
+            })
+            .catch((e) => {
+                setIsLoading(false)
+                console.log(e);
+            });
 
     };
 

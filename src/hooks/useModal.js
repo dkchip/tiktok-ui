@@ -10,12 +10,18 @@ function useModal(ModalComponent){
 
     function modalHide(){
         setIsShowing(false);
+        setConfirm(false)
     }
 
-    const handleConfirm = () => {
-        setConfirm(!confirm);
-        modalHide()
+    const handleConfirm = (cb) => {
+        setConfirm(true);
+        const timerId = setTimeout(() => {
+            cb()
+        },0)
         
+        return () => {
+            clearTimeout(timerId);
+        }
     }
 
     const ModalExport = ({data})=>{

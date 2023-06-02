@@ -78,6 +78,24 @@ export const getProfileUser = async (name,token)=>{
     }
 }
 
+export const updateProfileUser = async (token,formData) => {
+    try{
+        const res = await request.post('auth/me',formData,{
+            headers : {
+                Authorization : `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            },
+            params:{
+                _method : 'PATCH',
+            }
+
+        })
+        return res.data;
+    }catch(error){
+        console.log(error)
+    }
+}
+
 export const registerUser = async (email,password,type = "email")=>{
     try{
         const res = await  request.post("auth/register",{

@@ -1,20 +1,18 @@
-import styles from './Following.module.scss';
+import { useEffect, useState,useContext } from 'react';
+import { useDispatch ,useSelector } from 'react-redux';
 import classNames from 'classnames/bind';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Cookies from 'js-cookie';
-import { useDispatch ,useSelector } from 'react-redux';
 
-
-
+import styles from './Following.module.scss';
 import { setVideosFollowing ,updateVideoFollowing} from '../../store/slices/videosSlice';
 import { setAccountPreview } from '../../store/slices/accountSlice';
 import ButtonBottom from '../../components/ButtonBottom/ButtonBottom';
-import { useEffect, useState } from 'react';
 import { getSuggestedUsers } from '../../services/userServices';
 import CardPlayerItem from './CardPlayerItem';
 import VideoItem from '../../components/VideoItem/VideoItem';
 import { getVideosAuth } from '../../services/videoService';
-
+import { ModalContextKeys } from '../../contexts/ModalContext';
 
 
 
@@ -28,9 +26,8 @@ function Following() {
     });
 
     
-
+    const {isShowing} = useContext(ModalContextKeys);
     const [page, setPage] = useState(1);
-
     const [volume, setVolume] = useState('0');
     const { dataAllVideosFollowing } = useSelector((state) => state.videos);
 
@@ -46,6 +43,13 @@ function Following() {
         dispatch(updateVideoFollowing([]));
         dispatch(setAccountPreview([]));
     },[])
+
+    useEffect(() => {
+        if(isShowing === false){
+            window.history.replaceState({},"", `/following`);
+        }
+    },[isShowing])
+    
 
     useEffect(() => {
 

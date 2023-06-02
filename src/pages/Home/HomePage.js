@@ -8,7 +8,7 @@ import VideoItem from '../../components/VideoItem/VideoItem';
 import Cookies from 'js-cookie';
 import { useDispatch ,useSelector } from 'react-redux';
 import { setvideos,updateVideo } from '../../store/slices/videosSlice';
-
+import { ModalContextKeys } from '../../contexts/ModalContext';
 
 const cx = classNames.bind(styles);
 function HomePage() {
@@ -17,6 +17,7 @@ function HomePage() {
     document.title = 'Tiktok - Make your day';
     // const [dataVideo, setDataVideo] = useState([]);
 
+    const {isShowing} = useContext(ModalContextKeys);
 
     const [page, setPage] = useState(1);
     const [volume, setVolume] = useState('0');
@@ -29,6 +30,12 @@ function HomePage() {
     useEffect(()=>{
         dispatch(updateVideo([]))
     },[])
+
+    useEffect(() => {
+        if(isShowing === false){
+            window.history.replaceState({},"", `/`);
+        }
+    },[isShowing])
     
     useEffect(() => {
         const time = setTimeout(() => {
@@ -60,6 +67,7 @@ function HomePage() {
     return loading ? (
         dataVideo.dataAllVideos.length > 0 ? (
             <div className={'wrapper'}>
+                {/* <ToastMessage /> */}
                 <div className={cx('content')}>
                     <InfiniteScroll
                         dataLength={dataVideo.dataAllVideos.length}

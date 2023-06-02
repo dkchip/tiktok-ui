@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 
 import Button from '../../Button';
-import styles from './ModalConfirm.module.scss';
+import styles from './ModalDeleteVideo.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -10,15 +10,14 @@ function ModalConfirm({modalHide,handleConfirm}) {
         <div className={cx('wrapper')}>
             <div className={cx('content')}>
                 <div className={cx("heading")}>
-                    <h2 >Replace this video?</h2>
-                    <span>Caption and video settings will still be saved.</span>
+                    <h2 >Are you sure you want to delete this video?</h2>
                 </div>
                 <div className={cx("btn-container")}>
-                        <Button primary onclick={() => {
+                        <Button outline onclick={() => {
                             handleConfirm(modalHide)
                      
-                        }}> Replace</Button>
-                        <Button outline onclick={modalHide}>Continue editting</Button>
+                        }}> Delete</Button>
+                        <Button outline onclick={modalHide}>Cannel</Button>
                 </div>
             </div>
         </div>

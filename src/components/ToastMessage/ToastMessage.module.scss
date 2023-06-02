@@ -1,0 +1,36 @@
+.wrapper{
+    width: max-content;
+    height: 30px;
+    padding: 0 10px;
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.4);
+    text-align: center;
+    border-radius: 2px;
+    color: var(--white);
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    z-index: 9999999999999;
+    animation: toastInTop 0.4s ease-in-out;
+
+}
+
+.text{
+    line-height: 30px;
+}
+
+@keyframes toastInTop{
+    from {
+
+        opacity: 0;
+        // transform: translateY(-100px);
+        top: -30px;
+      }
+      to {    
+        top: 20px;
+        opacity: 1;
+        // transform: translateY(0);
+      }
+}

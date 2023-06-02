@@ -15,7 +15,7 @@ function ModalDiscard({modalHide,handleConfirm}) {
                 </div>
                 <div className={cx("btn-container")}>
                         <Button primary onclick={() => {
-                            handleConfirm()
+                            handleConfirm(modalHide)
                      
                         }}> Discard</Button>
                         <Button outline onclick={modalHide}>Continue editting</Button>

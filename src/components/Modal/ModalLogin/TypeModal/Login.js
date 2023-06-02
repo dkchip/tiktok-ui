@@ -3,7 +3,6 @@ import styles from './TypeModal.module.scss';
 import { EyeHideIcon, EyeShowIcon } from '../../../Icon';
 import { useState, useContext } from 'react';
 import { loginUser } from '../../../../services/userServices';
-import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../../../store/slices/userSlice';
@@ -11,9 +10,9 @@ import { ModalLoadingContextKeys } from '../../../../contexts/ModalLoadingContex
 
 const cx = classNames.bind(styles);
 function Login() {
-    const history = useNavigate();
-    const { isShowingModalLoad, isHideModalLoad } = useContext(ModalLoadingContextKeys);
 
+    const { isShowingModalLoad, isHideModalLoad,handleToastShowing } = useContext(ModalLoadingContextKeys);
+    
     const [show, setShow] = useState(false);
     const [account,setAccount] = useState({
         email : "",
@@ -37,12 +36,9 @@ function Login() {
         setShow(!show);
     };
 
-    const goToHomePage = () => {
-        history('/');
-    };
-
     
     function ValidateEmail(value) {
+        // eslint-disable-next-line
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
             return true;
         }
@@ -106,30 +102,52 @@ function Login() {
                     })
                 }
             break;
+            default:
+                console.error("error: unknown");
+                
            
         }
     }
 
 
     const handleLogin = (e) => {
+        let timerId
         e.preventDefault();
         if(booleanValue.email && booleanValue.password){
             isShowingModalLoad();
             setTimeout(() => {
                 loginUser(account.email, account.password)
                     .then((res) => {
-                        dispatch(setUser(res.data));
-                        Cookies.remove('tokenAuth');
-                        Cookies.set('tokenAuth', res.meta.token);
-                        window.location.reload();
-                        goToHomePage();
-                        isHideModalLoad();
+                        if(res){
+                            handleToastShowing("Login successful");
+                        }
+    
+                        return new Promise((resolve, reject) => {
+                             setTimeout(() => {
+                                 resolve(() => {
+                                     dispatch(setUser(res.data));
+                                     Cookies.remove('tokenAuth');
+                                     Cookies.set('tokenAuth', res.meta.token);
+                                     isHideModalLoad();
+                                     window.location.reload();
+                                 })
+                             },1000)
+                        })    
+                                   
+                    })
+                    .then((callback) => {
+                        callback();
                     })
                     .catch((e) => {
+                        console.log("failed")     
                         setErrorLogin(true);
                         isHideModalLoad();
                     });
             }, 500);
+        }
+
+        return () => {
+            clearTimeout(timerId)
         }
     };
 
@@ -175,7 +193,8 @@ function Login() {
                             )}
                         </div>
                     </div>
-                    <a className={cx('link')}>Quên mật khẩu?</a>
+                   {/* eslint-disable-next-line */}
+                    <a className={cx('link')} href='#'>Quên mật khẩu?</a>
                     {
                         errorLogin ? <span className={cx("error-register")}>Tài khoản hoặc mật khẩu không chính xác</span> : null
                     }

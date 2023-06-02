@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import {useState, useEffect, useContext } from 'react';
 import classNames from 'classnames/bind';
 import { useSelector,useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
 
 import {
     LinkIcon,
@@ -28,7 +29,6 @@ import ButtonBottom from '../../components/ButtonBottom/ButtonBottom';
 import VideosProfile from './VideosProfile';
 import LikedProfile from './LikedProfile';
 import { ModalContextKeys } from '../../contexts/ModalContext';
-import Cookies from 'js-cookie';
 import { setOtherUser } from '../../store/slices/userSlice';
 
 
@@ -109,7 +109,7 @@ function UserPage() {
     const dispatch = useDispatch();
     const auth = useSelector(state => state.user.auth)
     const currentUser = useSelector(state => state.user.currentUser)
-    const {isShowingLogin} = useContext(ModalContextKeys)
+    const {isShowingLogin,isShowing,handleShowingModalUpdate} = useContext(ModalContextKeys)
     const token = Cookies.get("tokenAuth")
     const dataAllVideoUser = useSelector(state => state.videos.dataAllVideosUser);
 
@@ -130,6 +130,14 @@ function UserPage() {
                 setLoading(true)
             })
     }, [user.nickname]);
+
+    
+
+    useEffect(() => {
+        if(isShowing === false){
+            window.history.replaceState({},"", `/@${user.nickname}`);
+        }
+    },[isShowing])
 
     const fullName = data ? (`${(data.first_name ? data.first_name : "") + ' '+ (data.last_name ? data.last_name : '')}`) : null
     
@@ -182,7 +190,7 @@ function UserPage() {
                                     (
                                         currentUser.id === data.id ? 
                                         (
-                                            <Button  iconLeft={<EditProfileIcon />} outline>Sửa hồ sơ</Button>
+                                            <Button  iconLeft={<EditProfileIcon />} onclick={handleShowingModalUpdate} outline>Sửa hồ sơ</Button>
                                         ) : (
                                             data.is_followed ? 
                                             (

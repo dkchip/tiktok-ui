@@ -94,17 +94,17 @@ function VideoItem({
     setInteraction,
     followingPage = false
 }) {
-
-    const { auth } = useSelector((state)=>state.user);
+    const token = Cookies.get('tokenAuth');
+    const { auth,currentUser } = useSelector((state)=>state.user);
     const dataAllVideos =  useSelector((state)=>state.videos).dataAllVideos;
     const dataAllVideosFollowing = useSelector((state)=>state.videos).dataAllVideosFollowing
     const dataAll = followingPage ? dataAllVideosFollowing : dataAllVideos; 
-    
+
     const dispatch = useDispatch();
 
     const [playing, setPlaying] = useState(false);
     const videoRef = useRef(null);
-    const { isShowingLogin, isShowingModalVideo, setIndexVideo ,setTypeModal} = useContext(ModalContextKeys);
+    const { isShowingLogin, isShowingModalVideo, setIndexVideo ,setTypeModal,isShowing} = useContext(ModalContextKeys);
 
     const {dataAccounts} = useSelector((state)=> state.accounts);
     const options = {
@@ -112,7 +112,7 @@ function VideoItem({
         rootMargin: '0px',
         threshold: 0.6,
     };
-
+ 
     const isVisibile = useElementOnScreen(options, videoRef);
 
     const handleClick = () => {
@@ -147,7 +147,7 @@ function VideoItem({
     }
 
     useEffect(() => {
-        if (isVisibile && interaction) {
+        if (isVisibile && !isShowing ) {
             if (!playing && playPromise !== undefined) {
                 playVideo();
             }
@@ -158,7 +158,7 @@ function VideoItem({
             }
         }
         // eslint-disable-next-line
-    }, [isVisibile]);
+    }, [isVisibile,isShowing]);
 
     useEffect(() => {
         videoRef.current.volume = volume;
@@ -219,7 +219,6 @@ function VideoItem({
     }
 
     // handle request
-    const token = Cookies.get('tokenAuth');
 
 
     const handleLikeVideo = () => {
@@ -333,20 +332,26 @@ function VideoItem({
                     </div>
                     {auth ? (
                         !followingPage ? (
-                            !data.user.is_followed ? (
-                                <div className={cx('btn')}>
-                                    <Button outlinePrimary onClick={handleFollow}>
-                                        Follow
-                                    </Button>
-                                </div>
+                            currentUser.id === data.user.id ? (
+                                null
                             ) : (
-                                <div className={cx('btn')}>
-                                    <Button outline onClick={handleFollow}>
-                                        Đang follow
-                                    </Button>
-                                </div>
+                                !data.user.is_followed ? (
+                                    <div className={cx('btn')}>
+                                        <Button outlinePrimary onClick={handleFollow}>
+                                            Follow
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <div className={cx('btn')}>
+                                        <Button outline onClick={handleFollow}>
+                                            Đang follow
+                                        </Button>
+                                    </div>
+                                )
                             )
-                        ) :(null)
+                        ) :(
+                            null
+                        )
                     ) : (
                         <div className={cx('btn')}>
                             <Button
@@ -446,6 +451,7 @@ function VideoItem({
                                 className={cx('icon')}
                                 onClick={() => {
                                     handleClick();
+                                    onVideoClick();
                                 }}
                             >
                                 <CommentIcon />

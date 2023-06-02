@@ -147,4 +147,22 @@ export const postVideo = async (token,formData) => {
     }
 }
 
+export const deleteVideo = async (token,uuid) => {
+    try{
+        const res = await request.delete(`videos/${uuid}`,{
+            headers :{
+                Authorization : `Bearer ${token}`,
+            },
+            
+        })
+
+        return res;
+    }catch(e){
+        console.log(e)
+    }
+}
+
+
+
+
 

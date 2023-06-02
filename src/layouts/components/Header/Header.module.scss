@@ -54,12 +54,19 @@
     
 }
 
-.menu-user-avt{
-    width: 32px;
-    height: 32px;
-    margin-left: 12px;
-    border-radius: 50%;
-    cursor: pointer;
-    object-fit: cover;
+
+.img-avatar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & img{
+        width: 32px;
+        height: 32px;
+        margin-left: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+        object-fit: cover;
+    }
 }
 
